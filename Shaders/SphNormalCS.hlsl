@@ -158,5 +158,5 @@ void main(uint3 gid : SV_GroupID,
     Shaded[pix] = float4(LinearToneMapping(final_rgb), opacity);
     //Shaded[pix] = float4(ambient + diffuse + specular, 1.0);
     //float dNorm = (dC - 0.1) / (10.0 - 0.1);
-    //Shaded[pix] = float4(dNorm, dNorm, dNorm, 1.0);;
+    //Shaded[pix] = float4(dNorm, dNorm, dNorm, 1.0);
 }

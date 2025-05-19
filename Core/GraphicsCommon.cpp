@@ -59,6 +59,10 @@ namespace Graphics
 	ComPtr<IDxcBlob> sphNormalCS;
 	ComPtr<IDxcBlob> sphSceneVS;
 	ComPtr<IDxcBlob> sphScenePS;
+	ComPtr<IDxcBlob> tileVS;
+	ComPtr<IDxcBlob> tilePS;
+	ComPtr<IDxcBlob> beakerVS;
+	ComPtr<IDxcBlob> beakerPS;
 
 	ComPtr<IDxcBlob> boundsBoxVS;
 	ComPtr<IDxcBlob> boundsBoxPS;
@@ -80,6 +84,7 @@ namespace Graphics
 	D3D12_DEPTH_STENCIL_DESC disabledDS;
 	D3D12_DEPTH_STENCIL_DESC maskDS;
 	D3D12_DEPTH_STENCIL_DESC drawMaskedDS;
+	D3D12_DEPTH_STENCIL_DESC depthOnWriteOffDS;
 
 	ComPtr<ID3D12PipelineState> basicSolidPSO;
 	ComPtr<ID3D12PipelineState> basicWirePSO;
@@ -121,6 +126,8 @@ namespace Graphics
 	ComPtr<ID3D12PipelineState> sphSmoothingCSPSO;
 	ComPtr<ID3D12PipelineState> sphNormalCSPSO;
 	ComPtr<ID3D12PipelineState> sphScenePSO;
+	ComPtr<ID3D12PipelineState> tilePSO;
+	ComPtr<ID3D12PipelineState> beakerPSO;
 
 	ComPtr<ID3D12PipelineState> boundsBoxPSO;
 
@@ -522,6 +529,10 @@ void Graphics::InitSphShaders(ComPtr<ID3D12Device>& device)
 	CreateShader(device, L"SphNormalCS.hlsl", L"cs_6_0", sphNormalCS);
 	CreateShader(device, L"SphSceneVS.hlsl", L"vs_6_0", sphSceneVS);
 	CreateShader(device, L"SphScenePS.hlsl", L"ps_6_0", sphScenePS);
+	CreateShader(device, L"TileVS.hlsl", L"vs_6_0", tileVS);
+	CreateShader(device, L"TilePS.hlsl", L"ps_6_0", tilePS);
+	CreateShader(device, L"BeakerVS.hlsl", L"vs_6_0", beakerVS);
+	CreateShader(device, L"BeakerPS.hlsl", L"ps_6_0", beakerPS);
 
 	// BoundsBox
 	CreateShader(device, L"BoundsBoxVS.hlsl", L"vs_6_0", boundsBoxVS);
@@ -715,6 +726,14 @@ void Graphics::InitDepthStencilStates()
 		drawMaskedDS.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
 		drawMaskedDS.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
 		drawMaskedDS.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_EQUAL;
+	}
+
+	{
+		depthOnWriteOffDS = {};
+		depthOnWriteOffDS.DepthEnable = TRUE;
+		depthOnWriteOffDS.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		depthOnWriteOffDS.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+		depthOnWriteOffDS.StencilEnable = FALSE;
 	}
 }
 
@@ -1031,6 +1050,20 @@ void Graphics::InitSphPipelineStates(ComPtr<ID3D12Device>& device)
 	sphNormalCSPSODesc.CS = { sphNormalCS->GetBufferPointer(), sphNormalCS->GetBufferSize() };
 	sphNormalCSPSODesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 	ThrowIfFailed(device->CreateComputePipelineState(&sphNormalCSPSODesc, IID_PPV_ARGS(&sphNormalCSPSO)));
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC tilePSODesc = basicSolidPSODesc;
+	tilePSODesc.VS = { tileVS->GetBufferPointer(), tileVS->GetBufferSize() };
+	tilePSODesc.PS = { tilePS->GetBufferPointer(), tilePS->GetBufferSize() };
+	tilePSODesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	ThrowIfFailed(device->CreateGraphicsPipelineState(&tilePSODesc, IID_PPV_ARGS(&tilePSO)));
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC beakerPSODesc = basicSolidPSODesc;
+	beakerPSODesc.VS = { beakerVS->GetBufferPointer(), beakerVS->GetBufferSize() };
+	beakerPSODesc.PS = { beakerPS->GetBufferPointer(), beakerPS->GetBufferSize() };
+	beakerPSODesc.BlendState = alphaBlend;
+	beakerPSODesc.DepthStencilState = depthOnWriteOffDS;
+	beakerPSODesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	ThrowIfFailed(device->CreateGraphicsPipelineState(&beakerPSODesc, IID_PPV_ARGS(&beakerPSO)));
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC boundsBoxPSODesc = sphPSODesc;
 	boundsBoxPSODesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;

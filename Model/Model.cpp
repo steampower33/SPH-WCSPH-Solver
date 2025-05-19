@@ -53,20 +53,35 @@ Model::~Model()
 
 void Model::Update()
 {
-	XMMATRIX scaleMatrix = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
+	//XMMATRIX scaleMatrix = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
 
-	XMVECTOR translation = XMLoadFloat4(&m_position);
-	XMMATRIX translationMatrix = XMMatrixTranslationFromVector(translation);
+	//XMVECTOR translation = XMLoadFloat4(&m_position);
+	//XMMATRIX translationMatrix = XMMatrixTranslationFromVector(translation);
 
-	XMMATRIX newWorld = scaleMatrix * translationMatrix;
-	XMStoreFloat3(&m_boundingSphere->Center, newWorld.r[3]);
+	//XMMATRIX newWorld = scaleMatrix * translationMatrix;
+	//XMStoreFloat3(&m_boundingSphere->Center, newWorld.r[3]);
+	//XMStoreFloat4x4(&m_world, newWorld);
+
+	//XMStoreFloat4x4(&m_meshConstsBufferData.world, XMMatrixTranspose(newWorld));
+
+	//newWorld.r[3] = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+	//XMMATRIX worldInvTranspose = XMMatrixInverse(nullptr, newWorld);
+	//XMStoreFloat4x4(&m_meshConstsBufferData.worldIT, worldInvTranspose);
+
+	XMMATRIX oldWorld = XMLoadFloat4x4(&m_world);
+	XMVECTOR outScale, outRotQuat, outTrans;
+	XMMatrixDecompose(&outScale, &outRotQuat, &outTrans, oldWorld);
+
+	XMVECTOR newScale = XMLoadFloat3(&m_scale);           // 기존 m_scale
+	XMVECTOR newTrans = XMLoadFloat4(&m_position);        // 기존 m_position
+
+	XMMATRIX S = XMMatrixScalingFromVector(newScale);
+	XMMATRIX R = XMMatrixRotationQuaternion(outRotQuat);
+	XMMATRIX T = XMMatrixTranslationFromVector(newTrans);
+	XMMATRIX newWorld = S * R * T;
+
 	XMStoreFloat4x4(&m_world, newWorld);
-
 	XMStoreFloat4x4(&m_meshConstsBufferData.world, XMMatrixTranspose(newWorld));
-
-	newWorld.r[3] = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	XMMATRIX worldInvTranspose = XMMatrixInverse(nullptr, newWorld);
-	XMStoreFloat4x4(&m_meshConstsBufferData.worldIT, worldInvTranspose);
 
 	OnlyCallConstsMemcpy();
 }

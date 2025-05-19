@@ -30,6 +30,7 @@ private:
 	shared_ptr<Model> m_skybox;
 	shared_ptr<Model> m_board;
 	shared_ptr<Model> m_mirror;
+	shared_ptr<Model> m_plane;
 	XMFLOAT4 m_mirrorPlane;
 	float m_mirrorAlpha = 1.0f;
 	float m_blendFactor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -40,6 +41,7 @@ private:
 
 	shared_ptr<Model> m_screenSquare;
 	shared_ptr<Model> m_boundsBox;
+	shared_ptr<Model> m_beaker;
 
 	ShapesInfo m_shapesInfo;
 

@@ -78,6 +78,10 @@ namespace Graphics
 	extern ComPtr<IDxcBlob> sphNormalCS;
 	extern ComPtr<IDxcBlob> sphSceneVS;
 	extern ComPtr<IDxcBlob> sphScenePS;
+	extern ComPtr<IDxcBlob> tileVS;
+	extern ComPtr<IDxcBlob> tilePS;
+	extern ComPtr<IDxcBlob> beakerVS;
+	extern ComPtr<IDxcBlob> beakerPS;
 
 	extern ComPtr<IDxcBlob> boundsBoxVS;
 	extern ComPtr<IDxcBlob> boundsBoxPS;
@@ -102,6 +106,7 @@ namespace Graphics
 	extern D3D12_DEPTH_STENCIL_DESC disabledDS;
 	extern D3D12_DEPTH_STENCIL_DESC maskDS;
 	extern D3D12_DEPTH_STENCIL_DESC drawMaskedDS;
+	extern D3D12_DEPTH_STENCIL_DESC depthOnWriteOffDS;
 
 	// PSO
 	extern ComPtr<ID3D12PipelineState> basicSolidPSO;
@@ -144,6 +149,8 @@ namespace Graphics
 	extern ComPtr<ID3D12PipelineState> sphSmoothingCSPSO;
 	extern ComPtr<ID3D12PipelineState> sphNormalCSPSO;
 	extern ComPtr<ID3D12PipelineState> sphScenePSO;
+	extern ComPtr<ID3D12PipelineState> tilePSO;
+	extern ComPtr<ID3D12PipelineState> beakerPSO;
 
 	extern ComPtr<ID3D12PipelineState> boundsBoxPSO;
 

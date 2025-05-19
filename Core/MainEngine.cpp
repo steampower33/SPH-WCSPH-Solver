@@ -56,6 +56,42 @@ void MainEngine::Initialize()
 	}
 
 	//{
+	//	MeshData meshData = GeometryGenerator::MakeSquare(5.0f);
+	//	XMFLOAT4 pos = XMFLOAT4(0.0f, -m_sphSimCustom->m_maxBoundsY, 0.0f, 0.0f);
+	//	m_plane = make_shared<Model>(
+	//		m_device, m_pCurrFR->m_cmdList, m_commandQueue,
+	//		vector{ meshData }, m_cubemapIndexConstsData, m_textureManager, pos);
+	//	m_plane->m_key = "m_plane";
+	//	m_models.insert({ m_plane->m_key, m_plane });
+
+	//	float degrees = 90.0f;
+	//	float radians = XMConvertToRadians(degrees);
+	//	XMVECTOR AxisX{ 1.0f, 0.0f, 0.0f, 0.0f };
+	//	XMVECTOR quaternion = XMQuaternionRotationAxis(AxisX, radians);
+
+	//	XMVECTOR translation = XMLoadFloat4(&m_plane->m_position);
+	//	m_plane->UpdateQuaternionAndTranslation(quaternion, translation);
+	//}
+
+	//{
+	//	vector<MeshData> meshDatas = GeometryGenerator::ReadFromFile("./Assets/Beaker/", "beaker.fbx");
+	//	XMFLOAT4 pos = XMFLOAT4(0.0f, 5.0f, 0.0f, 0.0f);
+	//	m_beaker = make_shared<Model>(
+	//		m_device, m_pCurrFR->m_cmdList, m_commandQueue,
+	//		vector{ meshDatas }, m_cubemapIndexConstsData, m_textureManager, pos);
+	//	float scale = 5.0f;
+	//	m_beaker->m_scale = XMFLOAT3(scale, scale, scale);
+	//	
+	//	float degrees = 90.0f;
+	//	float radians = XMConvertToRadians(degrees);
+	//	XMVECTOR AxisX{ 1.0f, 0.0f, 0.0f, 0.0f };
+	//	XMVECTOR quaternion = XMQuaternionRotationAxis(AxisX, radians);
+
+	//	XMVECTOR translation = XMLoadFloat4(&m_beaker->m_position);
+	//	m_beaker->UpdateQuaternionAndTranslation(quaternion, translation);
+	//}
+
+	//{
 	//	MeshData meshData = GeometryGenerator::MakeSphere(0.025f, 20, 20);
 	//	m_cursorSphere = make_shared<Model>(
 	//		m_device, m_pCurrFR->m_cmdList, m_commandQueue,
@@ -771,6 +807,18 @@ void MainEngine::UpdateGUI()
 						ImGui::EndTable();
 					}
 				}
+
+				//if (ImGui::CollapsingHeader("Beaker Parameters", ImGuiTreeNodeFlags_DefaultOpen))
+				//{
+				//	if (ImGui::BeginTable("Beaker Table", 2, flags))
+				//	{
+				//		flag += DrawTableRow("BeakerPosition", [&]() {
+				//			return ImGui::DragFloat3("##BeakerPosition", &m_beaker->m_position.x, 0.01f, -100.0f, 100.0f);
+				//			});
+
+				//		ImGui::EndTable();
+				//	}
+				//}
 				ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			}
 			ImGui::EndChild();
@@ -902,18 +950,20 @@ void MainEngine::Update(float dt)
 
 	m_sphSimCustom->Update(dt, m_forceKey, m_reset, m_camera, m_isPaused, m_skybox, m_boundaryMode);
 
-	// Update BoundsBox
-	{
-		XMVECTOR minB = XMLoadFloat3(&m_sphSimCustom->m_simParamsData.minBounds);
-		XMVECTOR maxB = XMLoadFloat3(&m_sphSimCustom->m_simParamsData.maxBounds);
+	//m_beaker->Update();
+	// 
+	//// Update BoundsBox
+	//{
+	//	XMVECTOR minB = XMLoadFloat3(&m_sphSimCustom->m_simParamsData.minBounds);
+	//	XMVECTOR maxB = XMLoadFloat3(&m_sphSimCustom->m_simParamsData.maxBounds);
 
-		XMVECTOR size = XMVectorScale(XMVectorSubtract(maxB, minB), 0.5f);
-		XMVECTOR center = XMVectorScale(XMVectorAdd(minB, maxB), 0.5f);
+	//	XMVECTOR size = XMVectorScale(XMVectorSubtract(maxB, minB), 0.5f);
+	//	XMVECTOR center = XMVectorScale(XMVectorAdd(minB, maxB), 0.5f);
 
-		XMStoreFloat3(&m_boundsBox->m_scale, size);
-		XMStoreFloat4(&m_boundsBox->m_position, center);
-		m_boundsBox->Update();
-	}
+	//	XMStoreFloat3(&m_boundsBox->m_scale, size);
+	//	XMStoreFloat4(&m_boundsBox->m_position, center);
+	//	m_boundsBox->Update();
+	//}
 
 	//UpdateMouseControl();
 	//UpdateLight(dt);
@@ -1020,8 +1070,6 @@ void MainEngine::SphRenderPass()
 		m_pCurrFR->m_cmdList->SetGraphicsRootConstantBufferView(3, m_pCurrFR->m_cubemapIndexConstsUploadHeap.Get()->GetGPUVirtualAddress());
 		m_pCurrFR->m_cmdList->SetGraphicsRootDescriptorTable(5, m_textureManager->m_textureHeap->GetGPUDescriptorHandleForHeapStart());
 
-		m_pCurrFR->m_cmdList->SetPipelineState(Graphics::skyboxSolidPSO.Get());
-
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_sphSimCustom->m_backgroundRTVHeap->GetCPUDescriptorHandleForHeapStart());
 		CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_sphSimCustom->m_backgroundDSVHeap->GetCPUDescriptorHandleForHeapStart());
 
@@ -1031,6 +1079,8 @@ void MainEngine::SphRenderPass()
 		m_pCurrFR->m_cmdList->ClearRenderTargetView(rtvHandle, particleRTVClearValue, 0, nullptr);
 		m_pCurrFR->m_cmdList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 
+		m_pCurrFR->m_cmdList->SetPipelineState(Graphics::skyboxSolidPSO.Get());
+
 		m_skybox->RenderSkybox(m_device, m_pCurrFR->m_cmdList);
 
 		SetBarrier(m_pCurrFR->m_cmdList, m_sphSimCustom->m_backgroundRTVBuffer,
@@ -1038,7 +1088,30 @@ void MainEngine::SphRenderPass()
 	}
 
 	// Sph Render
-	m_sphSimCustom->Render(m_pCurrFR->m_cmdList, m_pCurrFR->m_globalConstsUploadHeap);
+	{
+		m_sphSimCustom->Render(m_pCurrFR->m_cmdList, m_pCurrFR->m_globalConstsUploadHeap);
+	}
+
+	//// Beaker Render
+	//{
+	//	m_pCurrFR->m_cmdList->SetGraphicsRootSignature(Graphics::basicRootSignature.Get());
+
+	//	ID3D12DescriptorHeap* ppHeaps[] = { m_textureManager->m_textureHeap.Get() };
+	//	m_pCurrFR->m_cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
+	//	m_pCurrFR->m_cmdList->SetGraphicsRootConstantBufferView(0, m_pCurrFR->m_globalConstsUploadHeap.Get()->GetGPUVirtualAddress());
+	//	m_pCurrFR->m_cmdList->SetGraphicsRootConstantBufferView(3, m_pCurrFR->m_cubemapIndexConstsUploadHeap.Get()->GetGPUVirtualAddress());
+	//	m_pCurrFR->m_cmdList->SetGraphicsRootDescriptorTable(5, m_textureManager->m_textureHeap->GetGPUDescriptorHandleForHeapStart());
+
+	//	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_sphSimCustom->m_sceneRTVHeap->GetCPUDescriptorHandleForHeapStart());
+	//	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_sphSimCustom->m_particleDSVHeap->GetCPUDescriptorHandleForHeapStart());
+
+	//	m_pCurrFR->m_cmdList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+
+	//	m_pCurrFR->m_cmdList->SetPipelineState(Graphics::beakerPSO.Get());
+
+	//	m_beaker->Render(m_device, m_pCurrFR->m_cmdList);
+	//}
 
 	//m_pCurrFR->m_cmdList->SetPipelineState(Graphics::boundsBoxPSO.Get());
 	//m_boundsBox->RenderBoundsBox(m_device, m_pCurrFR->m_cmdList, m_pCurrFR->m_globalConstsUploadHeap);
