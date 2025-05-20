@@ -20,7 +20,7 @@ using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 using namespace std;
 
-#define STRUCTURED_CNT 12
+#define STRUCTURED_CNT 14
 #define CONSTANT_CNT 1
 
 class SphSimCustom
@@ -34,6 +34,7 @@ public:
 		UINT particleID = 0; // 원래 파티클 인덱스
 		int cellIndex = 0;  // 계산된 해시 값
 		UINT flag = 0; // 그룹 시작 플래그
+		float pad;
 	};
 
 	struct CompactCell
@@ -41,6 +42,15 @@ public:
 		int cellIndex = 0;
 		UINT startIndex = 0;
 		UINT endIndex = 0;
+		float pad;
+	};
+
+	struct Sorted
+	{
+		XMFLOAT3 position;
+		float density;
+		XMFLOAT3 velocity;
+		float nearDensity;
 	};
 
 	// Simulator Param
@@ -62,14 +72,14 @@ public:
 		UINT forceKey = 0;
 		
 		float density0 = 1000.0f;
-		float pressureCoeff = 80.0f;
+		float pressureCoeff = 60.0f;
 		float nearPressureCoeff = 10.0f;
 		float viscosity = 0.1f;
 	
-		float mass = 1.0f;
+		float mass = 0.7f;
 		float radius = 0.0f;
 		float boundaryStiffness = 1000.0f;
-		float boundaryDamping = 1.2f;
+		float boundaryDamping = 1.5f;
 		
 		float gravityCoeff = 1.0f;
 		float duration = 1.0f;
@@ -82,9 +92,9 @@ public:
 		float dp;
 
 		XMFLOAT3 emitterPos = XMFLOAT3{ 0.0f, 1.0f, 0.0f };
-		float emitterVel = 4.0f;
+		float emitterVel = 6.0f;
 		XMFLOAT3 emitterDir = XMFLOAT3{ 1.0f, -1.0f, 0.0f };
-		float spawnTimeStep = 4.0f;
+		float spawnTimeStep = 2.0f;
 
 		XMFLOAT4 p1;
 		XMFLOAT4 p2;
@@ -158,7 +168,7 @@ public:
 	const UINT m_nY = 20;
 	const UINT m_nZ = 50;
 	const UINT m_numParticles = m_nX * m_nY * m_nZ * 2;
-	UINT m_cellCnt = m_numParticles < 0 ? 2048 : m_numParticles;
+	UINT m_cellCnt = next_prime(int(m_numParticles * 1.3f));
 
 	void Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12GraphicsCommandList> commandList,
 		ComPtr<ID3D12CommandQueue> commandQueue, UINT width, UINT height);
@@ -287,6 +297,9 @@ private:
 	UINT m_cellStartIndex = 9;
 	UINT m_cellStartPartialSumIndex = 10;
 	UINT m_cellScatterIndex = 11;
+
+	UINT m_sortedIndex = 12;
+	UINT m_sortedPositionIndex = 13;
 
 	UINT m_width;
 	UINT m_height;

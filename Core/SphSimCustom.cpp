@@ -39,6 +39,9 @@ void SphSimCustom::Initialize(ComPtr<ID3D12Device> device,
 	CreateStructuredBufferWithViews(device, 10, sizeof(UINT), (m_cellCnt + m_groupSizeX - 1) / m_groupSizeX, L"CellStartPartialSum");
 	CreateStructuredBufferWithViews(device, 11, sizeof(UINT), m_numParticles, L"CellScatter");
 
+	CreateStructuredBufferWithViews(device, 12, sizeof(Sorted), m_numParticles, L"Sorted");
+	CreateStructuredBufferWithViews(device, 13, sizeof(XMFLOAT3), m_numParticles, L"SortedPosition");
+
 	// Position 초기 상태 -> SRV
 	UploadAndCopyData(device, commandList, m_position, sizeof(XMFLOAT3),
 		m_positionUploadBuffer, L"PositionUploadBuffer", m_structuredBuffer[m_positionIndex],
@@ -88,6 +91,14 @@ void SphSimCustom::Initialize(ComPtr<ID3D12Device> device,
 
 	// CellScatter 초기 상태 -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_cellScatterIndex],
+		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	// Sorted 초기 상태 -> UAV
+	SetBarrier(commandList, m_structuredBuffer[m_sortedIndex],
+		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	// SortedPosition 초기 상태 -> UAV
+	SetBarrier(commandList, m_structuredBuffer[m_sortedPositionIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	CreateConstantBuffer(device);
@@ -431,6 +442,10 @@ void SphSimCustom::Compute(ComPtr<ID3D12GraphicsCommandList>& commandList, UINT&
 
 	// CellScatter
 	{
+		SetBarrier(commandList, m_structuredBuffer[m_predictedVelocityIndex], // PredictedVelocity : UAV -> SRV
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
+			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+
 		commandList->SetPipelineState(Graphics::sphCellScatterCSPSO.Get());
 
 		SetBarrier(commandList, m_structuredBuffer[m_cellStartIndex],  // LocalScan : UAV -> SRV
@@ -445,29 +460,37 @@ void SphSimCustom::Compute(ComPtr<ID3D12GraphicsCommandList>& commandList, UINT&
 		commandList->Dispatch(cellScatterDispatchX, 1, 1);
 
 		SetUAVBarrier(commandList, m_structuredBuffer[m_cellScatterIndex]);
+		SetUAVBarrier(commandList, m_structuredBuffer[m_sortedIndex]);
+		SetUAVBarrier(commandList, m_structuredBuffer[m_sortedPositionIndex]);
 	}
 
 	// Density
 	{
 		commandList->SetPipelineState(Graphics::sphCalcDensityCSPSO.Get());
 
+		SetBarrier(commandList, m_structuredBuffer[m_sortedPositionIndex], // SortedPosition : UAV -> SRV
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
+			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 		SetBarrier(commandList, m_structuredBuffer[m_cellScatterIndex], // CellScatter : UAV -> SRV
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
+		UINT densityDispatchX = (m_numParticles + 32 - 1) / 32;
 		commandList->Dispatch(dispatchX, 1, 1);
 
 		SetUAVBarrier(commandList, m_structuredBuffer[m_densityIndex]);
 		SetUAVBarrier(commandList, m_structuredBuffer[m_nearDensityIndex]);
+		SetUAVBarrier(commandList, m_structuredBuffer[m_sortedIndex]);
 	}
 
 	// PressureForce, Viscosity
 	{
-		commandList->SetPipelineState(Graphics::sphCalcPressureForceCSPSO.Get());
-
-		SetBarrier(commandList, m_structuredBuffer[m_predictedVelocityIndex], // PredictedVelocity : UAV -> SRV
+		SetBarrier(commandList, m_structuredBuffer[m_sortedIndex], // Sorted : UAV -> SRV
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+
+		commandList->SetPipelineState(Graphics::sphCalcPressureForceCSPSO.Get());
+
 		SetBarrier(commandList, m_structuredBuffer[m_densityIndex], // Density : UAV -> SRV
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);

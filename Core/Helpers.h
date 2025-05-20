@@ -774,3 +774,17 @@ static void CreateTextureBuffer(
 	wprintf(L"Successfully loaded texture: %s, location is %d\n", wideFilename.c_str(), textureIndex - 1);
 
 }
+
+static bool isPrime(int x) {
+	if (x < 2) return false;
+	for (int i = 2; i * i <= x; ++i)
+		if (x % i == 0) return false;
+	return true;
+}
+
+static int next_prime(int start) {
+	while (!isPrime(start)) {
+		++start;
+	}
+	return start;
+}

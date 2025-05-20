@@ -10,6 +10,8 @@ StructuredBuffer<uint> SortedIdx : register(t11);
 
 StructuredBuffer<float> spawnTimes : register(t6);
 
+StructuredBuffer<Sorted> SortedInfo : register(t12);
+
 RWStructuredBuffer<float3> Velocities : register(u2);
 
 [numthreads(GROUP_SIZE_X, 1, 1)]
@@ -56,14 +58,20 @@ void main(uint tid : SV_GroupThreadID,
 			if (index == j) continue;
 
 			float3 pos_pred_j = PredictedPositions[j];
+			float3 vel_pred_j = PredictedVelocities[j];
+			float density_j = Densities[j];
+			float near_density_j = NearDensities[j];
+			
+			//float3 pos_pred_j = SortedInfo[n].position;
+			//float3 vel_pred_j = SortedInfo[n].velocity;
+
+			//float density_j = SortedInfo[n].density;
+			//float near_density_j = SortedInfo[n].nearDensity;
 
 			float3 x_ij_pred = pos_pred_j - pos_pred_i;
 			float sqrDist = dot(x_ij_pred, x_ij_pred);
 
 			if (sqrDist > sqrRadius) continue;
-
-			float density_j = Densities[j];
-			float near_density_j = NearDensities[j];
 
 			float pressure_j = PressureFromDensity(density_j, density0, pressureCoeff);
 			float near_pressure_j = NearPressureFromDensity(near_density_j, nearPressureCoeff);
@@ -71,14 +79,12 @@ void main(uint tid : SV_GroupThreadID,
 			float sharedPressure = (pressure_i + pressure_j) / 2.0f;
 			float sharedNearPressure = (near_pressure_i + near_pressure_j) / 2.0f;
 
-			float3 vel_pred_j = PredictedVelocities[j];
-
 			float r = length(x_ij_pred);
-			float3 dir = r > 0 ? x_ij_pred / r : float3(0.0, 1.0, 0.0);
+			float3 dir = r > 0 ? x_ij_pred / r : float3(0.0, -1.0, 0.0);
 
 			pressureForce += dir * mass *
 				(sharedPressure / density_j * DensityDerivative(r, smoothingRadius) +
-				sharedNearPressure / near_density_j * NearDensityDerivative(r, smoothingRadius));
+					sharedNearPressure / near_density_j * NearDensityDerivative(r, smoothingRadius));
 
 			viscosityForce += mass * (vel_pred_j - vel_pred_i) / density_j * ViscosityLaplacian(r, smoothingRadius);
 		}

@@ -6,6 +6,7 @@ struct ParticleHash
 	uint particleID;
 	int cellIndex;
 	uint flag;
+	float pad;
 };
 
 struct CompactCell
@@ -13,6 +14,15 @@ struct CompactCell
 	int cellIndex;
 	uint startIndex;
 	uint endIndex;
+	float pad;
+};
+
+struct Sorted
+{
+	float3 position;
+	float density;
+	float3 velocity;
+	float nearDensity;
 };
 
 #ifndef GROUP_SIZE_X
