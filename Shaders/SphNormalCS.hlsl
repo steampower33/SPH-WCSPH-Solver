@@ -89,6 +89,7 @@ void main(uint3 gid : SV_GroupID,
     {
         NormalMap[pix] = float4(0.5f, 0.5f, 0.5f, 1.0f);
         Shaded[pix] = float4(LinearToneMapping(Background.SampleLevel(SamplerLinearClamp, uv, 0).rgb), 1.0);
+        //Shaded[pix] = float4(0.0, 0.0, 0.0, 1.0);
         return;
     }
 
