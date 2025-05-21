@@ -27,9 +27,7 @@ void main(uint tid : SV_GroupThreadID,
 	if (currentTime < spawnTimes[index]) return;
 
 	float density_i = Densities[index];
-	//float near_density_i = NearDensities[index];
 	float pressure_i = PressureFromDensity(density_i, density0, pressureCoeff);
-	//float near_pressure_i = NearPressureFromDensity(near_density_i, nearPressureCoeff);
 
 	float3 vel_pred_i = PredictedVelocities[index];
 
@@ -55,7 +53,6 @@ void main(uint tid : SV_GroupThreadID,
 		{
 			uint j = SortedIdx[n];
 
-			//자기자신 제외
 			if (index == j) continue;
 			
 			float3 pos_pred_j = SortedInfo[n].position;

@@ -92,9 +92,9 @@ public:
 		float dp;
 
 		XMFLOAT3 emitterPos = XMFLOAT3{ 0.0f, 2.0f, 0.0f };
-		float emitterVel = 6.0f;
+		float emitterVel = 4.0f;
 		XMFLOAT3 emitterDir = XMFLOAT3{ 1.0f, -1.0f, 0.0f };
-		float spawnTimeStep = 3.0f;
+		float spawnTimeStep = 4.0f;
 
 		XMFLOAT4 p1;
 		XMFLOAT4 p2;

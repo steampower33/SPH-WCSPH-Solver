@@ -15,8 +15,8 @@ void CylinderBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 	float cylinderRadius = maxBounds.x;
 	if (distance > cylinderRadius - radius)
 	{
-		float3 normal = normalize(displacement);
-		Fb += normal * boundaryStiffness * (cylinderRadius - radius - distance);
+		float3 normal = normalize(-displacement);
+		Fb += normal * boundaryStiffness * (distance + radius - cylinderRadius);
 	}
 
 	// Y- ¸é

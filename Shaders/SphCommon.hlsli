@@ -116,7 +116,7 @@ float SpikyGradient(float r, float h)
 {
 	if (r >= h) return 0.0;
 
-	float C_grad = 45.0f / (PI * pow(h, 6.0));
+	float C_grad = 45 / (PI * pow(h, 6.0));
 
 	return C_grad * pow(h - r, 2.0);
 }
@@ -161,6 +161,7 @@ static const int3 offsets3D[27] =
 	int3(1, 1, 1)
 };
 
+
 float SpikyKernelPow3(float r, float h)
 {
 	if (r >= h) return 0.0;
@@ -170,13 +171,15 @@ float SpikyKernelPow3(float r, float h)
 	return v * v * v * scale;
 }
 
+#define SPIKY_POW2_SCALE 15 / (2.0 * PI * pow(smoothingRadius, 5))
+
 float SpikyKernelPow2(float r, float h)
 {
 	if (r >= h) return 0.0;
 
 	float scale = 15 / (2 * PI * pow(h, 5));
 	float v = h - r;
-	return v * v * scale;
+	return v * v * SPIKY_POW2_SCALE;
 }
 
 float DerivativeSpikyPow3(float r, float h)
@@ -188,12 +191,14 @@ float DerivativeSpikyPow3(float r, float h)
 	return -v * v * scale;
 }
 
+#define DERIVATIVE_SPIKY_POW2_SCALE (15 / (pow(smoothingRadius, 5) * PI))
+
 float DerivativeSpikyPow2(float r, float h)
 {
 	if (r >= h) return 0.0;
 	float scale = 15 / (pow(h, 5) * PI);
 	float v = h - r;
-	return -v * scale;
+	return -v * DERIVATIVE_SPIKY_POW2_SCALE;
 }
 
 float DensityKernel(float r, float h)

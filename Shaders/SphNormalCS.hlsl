@@ -10,6 +10,7 @@ TextureCube<float4> DiffuseEnvMap : register(t8);
 TextureCube<float4> SpecularEnvMap : register(t9);
 
 RWTexture2D<float4> NormalMap : register(u2);
+RWTexture2D<float4> Scene : register(u3);
 RWTexture2D<float4> Shaded : register(u4);
 
 SamplerState SamplerLinearClamp : register(s0);
@@ -124,17 +125,15 @@ void main(uint3 gid : SV_GroupID,
     latlongUV.x = atan2(worldNormal.z, worldNormal.x) * (1.0 / 6.2831853) + 0.5;
     latlongUV.y = asin(worldNormal.y) * (1.0 / 3.1415926) + 0.5;
 
-    float3 diffuseEnvColor = DiffuseEnvMap.SampleLevel(SamplerLinearWrap, float3(latlongUV, 0.0), 0.0).rgb;
-
     float3 reflectionDir = reflect(-V, worldNormal);
     float3 specularEnvColor = SpecularEnvMap.SampleLevel(SamplerLinearWrap, reflectionDir, 0.0).rgb;
 
-    specularEnvColor *= specularColor;
+    //specularEnvColor *= specularColor;
 
     // Thickness
     float  thickness = ThicknessMap.Load(int3(pix, 0)).r;
 
-    float3 beerTrans = exp(-waterDensity * thickness * (1.0 - diffuseEnvColor));
+    float3 beerTrans = exp(-waterDensity * thickness);
 
     // 굴절 효과 적용
     float3 rayDirView = normalize(posC);
@@ -145,7 +144,6 @@ void main(uint3 gid : SV_GroupID,
     float3 refracted_background_color = Background.SampleLevel(SamplerLinearClamp, refracted_uv, 0).rgb;
     float3 transmitted_background_color = refracted_background_color * beerTrans;
 
-    //float3 transmitted_color = diffuseEnvColor + (diffuseColor * beerTrans) + transmitted_background_color;
     float3 transmitted_color = transmitted_background_color;
 
     float3 reflected_color = specularEnvColor;

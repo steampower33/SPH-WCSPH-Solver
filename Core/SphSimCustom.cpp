@@ -678,42 +678,51 @@ void SphSimCustom::Render(ComPtr<ID3D12GraphicsCommandList>& commandList,
 		// Normal
 		commandList->SetPipelineState(Graphics::sphNormalCSPSO.Get());
 
+		SetBarrier(commandList, m_sceneRTVBuffer,
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
 		commandList->Dispatch(dispatchX, dispatchY, 1);
 
 		SetUAVBarrier(commandList, m_shadedRTVBuffer);
 		SetBarrier(commandList, m_shadedRTVBuffer,
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
-	}
 
-	// Scene 
-	{
+		SetUAVBarrier(commandList, m_sceneRTVBuffer);
 		SetBarrier(commandList, m_sceneRTVBuffer,
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-			D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-		commandList->SetGraphicsRootSignature(Graphics::sphSceneSignature.Get());
-
-		ID3D12DescriptorHeap* ppHeap[] = { m_renderHeap.Get() };
-		commandList->SetDescriptorHeaps(_countof(ppHeap), ppHeap);
-
-		CD3DX12_GPU_DESCRIPTOR_HANDLE srvGpuHandle(m_renderHeap->GetGPUDescriptorHandleForHeapStart(), m_cbvSrvUavSize * m_shadedSRVIndex);
-		commandList->SetGraphicsRootDescriptorTable(0, srvGpuHandle);
-
-		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_sceneRTVHeap->GetCPUDescriptorHandleForHeapStart());
-		commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
-
-		const float clearValue[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		commandList->ClearRenderTargetView(rtvHandle, clearValue, 0, nullptr);
-
-		commandList->SetPipelineState(Graphics::sphScenePSO.Get());
-		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // 삼각형 스트립
-		commandList->DrawInstanced(4, 1, 0, 0);
-
-		SetBarrier(commandList, m_sceneRTVBuffer,
-			D3D12_RESOURCE_STATE_RENDER_TARGET,
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	}
+
+	//// Scene 
+	//{
+	//	SetBarrier(commandList, m_sceneRTVBuffer,
+	//		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+	//		D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+	//	commandList->SetGraphicsRootSignature(Graphics::sphSceneSignature.Get());
+
+	//	ID3D12DescriptorHeap* ppHeap[] = { m_renderHeap.Get() };
+	//	commandList->SetDescriptorHeaps(_countof(ppHeap), ppHeap);
+
+	//	CD3DX12_GPU_DESCRIPTOR_HANDLE srvGpuHandle(m_renderHeap->GetGPUDescriptorHandleForHeapStart(), m_cbvSrvUavSize * m_shadedSRVIndex);
+	//	commandList->SetGraphicsRootDescriptorTable(0, srvGpuHandle);
+
+	//	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_sceneRTVHeap->GetCPUDescriptorHandleForHeapStart());
+	//	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+
+	//	const float clearValue[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//	commandList->ClearRenderTargetView(rtvHandle, clearValue, 0, nullptr);
+
+	//	commandList->SetPipelineState(Graphics::sphScenePSO.Get());
+	//	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // 삼각형 스트립
+	//	commandList->DrawInstanced(4, 1, 0, 0);
+
+	//	SetBarrier(commandList, m_sceneRTVBuffer,
+	//		D3D12_RESOURCE_STATE_RENDER_TARGET,
+	//		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	//}
 }
 
 void SphSimCustom::CreateStructuredBufferWithViews(
