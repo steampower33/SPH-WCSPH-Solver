@@ -9,6 +9,7 @@ StructuredBuffer<uint> CellCount : register(t7);
 StructuredBuffer<uint> SortedIdx : register(t11);
 
 StructuredBuffer<float> spawnTimes : register(t6);
+StructuredBuffer<float3> SortedPositions : register(t13);
 
 StructuredBuffer<Sorted> SortedInfo : register(t12);
 
@@ -57,16 +58,16 @@ void main(uint tid : SV_GroupThreadID,
 			//자기자신 제외
 			if (index == j) continue;
 
-			float3 pos_pred_j = PredictedPositions[j];
-			float3 vel_pred_j = PredictedVelocities[j];
-			float density_j = Densities[j];
-			float near_density_j = NearDensities[j];
+			//float3 pos_pred_j = PredictedPositions[j];
+			//float3 vel_pred_j = PredictedVelocities[j];
+			//float density_j = Densities[j];
+			//float near_density_j = NearDensities[j];
 			
-			//float3 pos_pred_j = SortedInfo[n].position;
-			//float3 vel_pred_j = SortedInfo[n].velocity;
+			float3 pos_pred_j = SortedInfo[n].position;
+			float3 vel_pred_j = SortedInfo[n].velocity;
 
-			//float density_j = SortedInfo[n].density;
-			//float near_density_j = SortedInfo[n].nearDensity;
+			float density_j = SortedInfo[n].density;
+			float near_density_j = SortedInfo[n].nearDensity;
 
 			float3 x_ij_pred = pos_pred_j - pos_pred_i;
 			float sqrDist = dot(x_ij_pred, x_ij_pred);

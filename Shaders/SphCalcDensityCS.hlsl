@@ -3,6 +3,7 @@
 StructuredBuffer<float3> PredictedPositions : register(t1);
 StructuredBuffer<uint> CellStart : register(t9);
 StructuredBuffer<uint> CellCount : register(t7);
+StructuredBuffer<uint2> CellOffset : register(t8);
 StructuredBuffer<uint> SortedIdx : register(t11);
 
 StructuredBuffer<float3> SortedPositions : register(t13);
@@ -60,9 +61,13 @@ void main(uint tid : SV_GroupThreadID,
 			nearDensity += mass * NearDensityKernel(r, smoothingRadius);
 		}
 	}
+	uint2 info = CellOffset[index];
+	if (info.x == 0xFFFFFFFF || info.y == 0xFFFFFFFF)
+		return;
+	uint dst = CellStart[info.x] + info.y;
 
-	SortedInfo[index].density = max(density, 1e-6f);
-	SortedInfo[index].nearDensity = max(nearDensity, 1e-6f);
+	SortedInfo[dst].density = max(density, 1e-6f);
+	SortedInfo[dst].nearDensity = max(nearDensity, 1e-6f);
 	Densities[index] = max(density, 1e-6f);
 	NearDensities[index] = max(nearDensity, 1e-6f);
 }

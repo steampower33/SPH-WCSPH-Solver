@@ -76,10 +76,10 @@ public:
 		float nearPressureCoeff = 10.0f;
 		float viscosity = 0.1f;
 	
-		float mass = 0.7f;
+		float mass = 1.0f;
 		float radius = 0.0f;
 		float boundaryStiffness = 1000.0f;
-		float boundaryDamping = 1.5f;
+		float boundaryDamping = 1.3f;
 		
 		float gravityCoeff = 1.0f;
 		float duration = 1.0f;
@@ -135,12 +135,12 @@ public:
 		float invHeight;
 
 		XMFLOAT3 eyeWorld;
-		float refractionStrength = 0.1f;
+		float refractionStrength = 0.05f;
 
 		XMFLOAT3 specularColor = XMFLOAT3(1.0f, 1.0f, 1.0f);
 		float waterDensity = 0.1f;
 
-		float fresnelClamp = 0.2f;
+		float fresnelClamp = 0.15f;
 		float p0;
 		float p1;
 		float p2;
@@ -158,7 +158,7 @@ public:
 	float m_radius = m_smoothingRadius * 0.5f;
 	float m_dp = m_smoothingRadius * 0.5f;
 	float m_maxBoundsX = 3.0f;
-	float m_maxBoundsY = 3.0f;
+	float m_maxBoundsY = 4.0f;
 	float m_maxBoundsZ = 3.0f;
 
 	UINT m_gridDimX = static_cast<UINT>(ceil(m_maxBoundsX * 2.0f / m_smoothingRadius));
