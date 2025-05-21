@@ -5,14 +5,10 @@ StructuredBuffer<uint> CellStart : register(t9);
 StructuredBuffer<uint> CellCount : register(t7);
 StructuredBuffer<uint2> CellOffset : register(t8);
 StructuredBuffer<uint> SortedIdx : register(t11);
-
+StructuredBuffer<float> spawnTimes : register(t6);
 StructuredBuffer<float3> SortedPositions : register(t13);
 
-StructuredBuffer<float> spawnTimes : register(t6);
-
 RWStructuredBuffer<float> Densities : register(u4);
-RWStructuredBuffer<float> NearDensities : register(u5);
-
 RWStructuredBuffer<Sorted> SortedInfo : register(u12);
 
 [numthreads(GROUP_SIZE_X, 1, 1)]
@@ -47,7 +43,6 @@ void main(uint tid : SV_GroupThreadID,
 		{
 			uint j = SortedIdx[n];
 
-			//float3 pos_pred_j = PredictedPositions[j];
 			float3 pos_pred_j = SortedPositions[n];
 
 			float3 x_ij_pred = pos_pred_j - pos_pred_i;
@@ -58,7 +53,6 @@ void main(uint tid : SV_GroupThreadID,
 
 			float r = sqrt(sqrDist);
 			density += mass * DensityKernel(r, smoothingRadius);
-			nearDensity += mass * NearDensityKernel(r, smoothingRadius);
 		}
 	}
 	uint2 info = CellOffset[index];
@@ -66,8 +60,8 @@ void main(uint tid : SV_GroupThreadID,
 		return;
 	uint dst = CellStart[info.x] + info.y;
 
-	SortedInfo[dst].density = max(density, 1e-6f);
-	SortedInfo[dst].nearDensity = max(nearDensity, 1e-6f);
+	density = max(density, 1e-6f);
+	SortedInfo[dst].density = density;
+	SortedInfo[dst].pressure = PressureFromDensity(density, density0, pressureCoeff);
 	Densities[index] = max(density, 1e-6f);
-	NearDensities[index] = max(nearDensity, 1e-6f);
 }

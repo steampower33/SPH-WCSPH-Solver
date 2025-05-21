@@ -50,7 +50,7 @@ public:
 		XMFLOAT3 position;
 		float density;
 		XMFLOAT3 velocity;
-		float nearDensity;
+		float pressure;
 	};
 
 	// Simulator Param
@@ -73,8 +73,8 @@ public:
 		
 		float density0 = 1000.0f;
 		float pressureCoeff = 60.0f;
-		float nearPressureCoeff = 10.0f;
 		float viscosity = 0.1f;
+		float p0;
 	
 		float mass = 1.0f;
 		float radius = 0.0f;
@@ -91,10 +91,10 @@ public:
 		UINT nZ;
 		float dp;
 
-		XMFLOAT3 emitterPos = XMFLOAT3{ 0.0f, 1.0f, 0.0f };
+		XMFLOAT3 emitterPos = XMFLOAT3{ 0.0f, 2.0f, 0.0f };
 		float emitterVel = 6.0f;
 		XMFLOAT3 emitterDir = XMFLOAT3{ 1.0f, -1.0f, 0.0f };
-		float spawnTimeStep = 2.0f;
+		float spawnTimeStep = 3.0f;
 
 		XMFLOAT4 p1;
 		XMFLOAT4 p2;
@@ -158,16 +158,16 @@ public:
 	float m_radius = m_smoothingRadius * 0.5f;
 	float m_dp = m_smoothingRadius * 0.5f;
 	float m_maxBoundsX = 3.0f;
-	float m_maxBoundsY = 4.0f;
+	float m_maxBoundsY = 3.0f;
 	float m_maxBoundsZ = 3.0f;
 
 	UINT m_gridDimX = static_cast<UINT>(ceil(m_maxBoundsX * 2.0f / m_smoothingRadius));
 	UINT m_gridDimY = static_cast<UINT>(ceil(m_maxBoundsY * 2.0f / m_smoothingRadius));
 	UINT m_gridDimZ = static_cast<UINT>(ceil(m_maxBoundsZ * 2.0f / m_smoothingRadius));
 	const UINT m_nX = 50;
-	const UINT m_nY = 20;
+	const UINT m_nY = 40;
 	const UINT m_nZ = 50;
-	const UINT m_numParticles = m_nX * m_nY * m_nZ * 2;
+	const UINT m_numParticles = m_nX * m_nY * m_nZ;
 	UINT m_cellCnt = next_prime(int(m_numParticles * 1.3f));
 
 	void Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12GraphicsCommandList> commandList,
@@ -288,7 +288,7 @@ private:
 	UINT m_velocityIndex = 2;
 	UINT m_predictedVelocityIndex = 3;
 	UINT m_densityIndex = 4;
-	UINT m_nearDensityIndex = 5;
+	UINT m_pressureIndex = 5;
 
 	UINT m_spawnTimeIndex = 6;
 

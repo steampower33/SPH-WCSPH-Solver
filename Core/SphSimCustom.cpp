@@ -30,7 +30,7 @@ void SphSimCustom::Initialize(ComPtr<ID3D12Device> device,
 	CreateStructuredBufferWithViews(device, 2, sizeof(XMFLOAT3), m_numParticles, L"Velocity");
 	CreateStructuredBufferWithViews(device, 3, sizeof(XMFLOAT3), m_numParticles, L"PredictedVelocity");
 	CreateStructuredBufferWithViews(device, 4, sizeof(float), m_numParticles, L"Density");
-	CreateStructuredBufferWithViews(device, 5, sizeof(float), m_numParticles, L"NearDensity");
+	CreateStructuredBufferWithViews(device, 5, sizeof(float), m_numParticles, L"Pressure");
 	CreateStructuredBufferWithViews(device, 6, sizeof(float), m_numParticles, L"SpawnTime");
 
 	CreateStructuredBufferWithViews(device, 7, sizeof(UINT), m_cellCnt, L"CellCount");
@@ -64,8 +64,8 @@ void SphSimCustom::Initialize(ComPtr<ID3D12Device> device,
 	SetBarrier(commandList, m_structuredBuffer[m_densityIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// NearDensity 초기 상태 -> UAV
-	SetBarrier(commandList, m_structuredBuffer[m_nearDensityIndex],
+	// Pressure 초기 상태 -> UAV
+	SetBarrier(commandList, m_structuredBuffer[m_pressureIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	// SpawnTime 초기 상태 -> SRV
@@ -231,9 +231,13 @@ void SphSimCustom::GenerateDamParticles()
 					m_nX * y +
 					m_nX * m_nY * z;
 
-				m_position[index].x = -m_maxBoundsX + m_dp * 10.0f + m_dp * x;
-				m_position[index].y = (-m_maxBoundsY + midY * 0.5f + m_dp * 10.0f) + m_dp * y;
-				m_position[index].z = -m_maxBoundsZ + m_dp + m_dp * z;
+				//m_position[index].x = -m_maxBoundsX + m_dp * 10.0f + m_dp * x;
+				//m_position[index].y = (-m_maxBoundsY + midY * 0.5f + m_dp * 10.0f) + m_dp * y;
+				//m_position[index].z = -m_maxBoundsZ + m_dp + m_dp * z;
+				 
+				m_position[index].x = -m_dp * m_nX * 0.5f + m_dp * x;
+				m_position[index].y = -m_dp * m_nY * 0.5f + m_dp * y;
+				m_position[index].z = -m_dp * m_nZ * 0.5f + m_dp + m_dp * z;
 
 				m_velocity[index] = XMFLOAT3{ 0.0f, 0.0f, 0.0f };
 
@@ -242,27 +246,27 @@ void SphSimCustom::GenerateDamParticles()
 		}
 	}
 
-	for (UINT z = 0; z < m_nZ; z++)
-	{
-		for (UINT y = 0; y < m_nY; y++)
-		{
-			for (UINT x = 0; x < m_nX; x++)
-			{
-				UINT index = m_nX * m_nY * m_nZ +
-					x +
-					m_nX * y +
-					m_nX * m_nY * z;
+	//for (UINT z = 0; z < m_nZ; z++)
+	//{
+	//	for (UINT y = 0; y < m_nY; y++)
+	//	{
+	//		for (UINT x = 0; x < m_nX; x++)
+	//		{
+	//			UINT index = m_nX * m_nY * m_nZ +
+	//				x +
+	//				m_nX * y +
+	//				m_nX * m_nY * z;
 
-				m_position[index].x = m_maxBoundsX - m_dp * 10.0f - m_dp * x;
-				m_position[index].y = (-m_maxBoundsY + midY * 0.5f + m_dp * 10.0f) + m_dp * y;
-				m_position[index].z = m_maxBoundsZ - m_dp - m_dp * z;
+	//			m_position[index].x = m_maxBoundsX - m_dp * 10.0f - m_dp * x;
+	//			m_position[index].y = (-m_maxBoundsY + midY * 0.5f + m_dp * 10.0f) + m_dp * y;
+	//			m_position[index].z = m_maxBoundsZ - m_dp - m_dp * z;
 
-				m_velocity[index] = XMFLOAT3{ 0.0f, 0.0f, 0.0f };
+	//			m_velocity[index] = XMFLOAT3{ 0.0f, 0.0f, 0.0f };
 
-				m_spawnTime[index] = -1.0f;
-			}
-		}
-	}
+	//			m_spawnTime[index] = -1.0f;
+	//		}
+	//	}
+	//}
 }
 
 void SphSimCustom::Update(float dt, UINT& forceKey, UINT& reset, shared_ptr<Camera>& camera, bool isPaused, shared_ptr<Model>& skybox, UINT boundaryMode)
@@ -479,7 +483,7 @@ void SphSimCustom::Compute(ComPtr<ID3D12GraphicsCommandList>& commandList, UINT&
 		commandList->Dispatch(dispatchX, 1, 1);
 
 		SetUAVBarrier(commandList, m_structuredBuffer[m_densityIndex]);
-		SetUAVBarrier(commandList, m_structuredBuffer[m_nearDensityIndex]);
+		SetUAVBarrier(commandList, m_structuredBuffer[m_pressureIndex]);
 		SetUAVBarrier(commandList, m_structuredBuffer[m_sortedIndex]);
 	}
 
@@ -494,7 +498,7 @@ void SphSimCustom::Compute(ComPtr<ID3D12GraphicsCommandList>& commandList, UINT&
 		SetBarrier(commandList, m_structuredBuffer[m_densityIndex], // Density : UAV -> SRV
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
-		SetBarrier(commandList, m_structuredBuffer[m_nearDensityIndex], // NearDensity : UAV -> SRV
+		SetBarrier(commandList, m_structuredBuffer[m_pressureIndex], // NearDensity : UAV -> SRV
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 		SetBarrier(commandList, m_structuredBuffer[m_velocityIndex],    // Velocity : SRV -> UAV
@@ -536,7 +540,7 @@ void SphSimCustom::Compute(ComPtr<ID3D12GraphicsCommandList>& commandList, UINT&
 		SetBarrier(commandList, m_structuredBuffer[m_densityIndex],   // Density: SRV -> UAV
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE,
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-		SetBarrier(commandList, m_structuredBuffer[m_nearDensityIndex],  // NearDensity : SRV -> UAV
+		SetBarrier(commandList, m_structuredBuffer[m_pressureIndex],  // Pressure : SRV -> UAV
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE,
 			D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 

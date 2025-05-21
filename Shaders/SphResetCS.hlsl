@@ -30,26 +30,31 @@ void main(uint tid : SV_GroupThreadID,
 			uint y = rem / nX;
 			uint x = rem % nX;
 
+			//Positions[index] = float3(
+			//	-maxBounds.x + dp * 10.0 + dp * x,
+			//	-maxBounds.y + dp * 10.0 + dp * y,
+			//	-maxBounds.z + dp + dp * z
+			//	);
 			Positions[index] = float3(
-				-maxBounds.x + dp * 10.0 + dp * x,
-				-maxBounds.y + dp * 10.0 + dp * y,
-				-maxBounds.z + dp + dp * z
+				-dp * nX * 0.5 + dp * x,
+				-dp * nY * 0.5 + dp * y,
+				-dp * nZ * 0.5 + dp * z
 				);
 		}
-		else
-		{
-			uint idx = index - slice;
-			uint z = idx / (nX * nY);
-			uint rem = idx % (nX * nY);
-			uint y = rem / nX;
-			uint x = rem % nX;
+		//else
+		//{
+		//	uint idx = index - slice;
+		//	uint z = idx / (nX * nY);
+		//	uint rem = idx % (nX * nY);
+		//	uint y = rem / nX;
+		//	uint x = rem % nX;
 
-			Positions[index] = float3(
-				maxBounds.x - dp * 10.0 - dp * x,
-				-maxBounds.y + dp * 10.0 + dp * y,
-				maxBounds.z - dp - dp * z
-				);
-		}
+		//	Positions[index] = float3(
+		//		maxBounds.x - dp * 10.0 - dp * x,
+		//		-maxBounds.y + dp * 10.0 + dp * y,
+		//		maxBounds.z - dp - dp * z
+		//		);
+		//}
 
 		Velocities[index] = float3(0, 0, 0);
 		SpawnTimes[index] = -1.0;

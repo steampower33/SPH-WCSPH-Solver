@@ -3,7 +3,7 @@
 StructuredBuffer<float3> PredictedPositions : register(t1);
 StructuredBuffer<float3> PredictedVelocities : register(t3);
 StructuredBuffer<float> Densities : register(t4);
-StructuredBuffer<float> NearDensities : register(t5);
+
 StructuredBuffer<uint> CellStart : register(t9);
 StructuredBuffer<uint> CellCount : register(t7);
 StructuredBuffer<uint> SortedIdx : register(t11);
@@ -27,9 +27,9 @@ void main(uint tid : SV_GroupThreadID,
 	if (currentTime < spawnTimes[index]) return;
 
 	float density_i = Densities[index];
-	float near_density_i = NearDensities[index];
+	//float near_density_i = NearDensities[index];
 	float pressure_i = PressureFromDensity(density_i, density0, pressureCoeff);
-	float near_pressure_i = NearPressureFromDensity(near_density_i, nearPressureCoeff);
+	//float near_pressure_i = NearPressureFromDensity(near_density_i, nearPressureCoeff);
 
 	float3 vel_pred_i = PredictedVelocities[index];
 
@@ -57,36 +57,24 @@ void main(uint tid : SV_GroupThreadID,
 
 			//자기자신 제외
 			if (index == j) continue;
-
-			//float3 pos_pred_j = PredictedPositions[j];
-			//float3 vel_pred_j = PredictedVelocities[j];
-			//float density_j = Densities[j];
-			//float near_density_j = NearDensities[j];
 			
 			float3 pos_pred_j = SortedInfo[n].position;
 			float3 vel_pred_j = SortedInfo[n].velocity;
 
 			float density_j = SortedInfo[n].density;
-			float near_density_j = SortedInfo[n].nearDensity;
+			float pressure_j = SortedInfo[n].pressure;
 
 			float3 x_ij_pred = pos_pred_j - pos_pred_i;
 			float sqrDist = dot(x_ij_pred, x_ij_pred);
 
 			if (sqrDist > sqrRadius) continue;
 
-			float pressure_j = PressureFromDensity(density_j, density0, pressureCoeff);
-			float near_pressure_j = NearPressureFromDensity(near_density_j, nearPressureCoeff);
-
 			float sharedPressure = (pressure_i + pressure_j) / 2.0f;
-			float sharedNearPressure = (near_pressure_i + near_pressure_j) / 2.0f;
 
 			float r = length(x_ij_pred);
 			float3 dir = r > 0 ? x_ij_pred / r : float3(0.0, -1.0, 0.0);
 
-			pressureForce += dir * mass *
-				(sharedPressure / density_j * DensityDerivative(r, smoothingRadius) +
-					sharedNearPressure / near_density_j * NearDensityDerivative(r, smoothingRadius));
-
+			pressureForce += dir * mass * sharedPressure / density_j * DensityDerivative(r, smoothingRadius);
 			viscosityForce += mass * (vel_pred_j - vel_pred_i) / density_j * ViscosityLaplacian(r, smoothingRadius);
 		}
 	}

@@ -22,7 +22,7 @@ struct Sorted
 	float3 position;
 	float density;
 	float3 velocity;
-	float nearDensity;
+	float pressure;
 };
 
 #ifndef GROUP_SIZE_X
@@ -47,8 +47,8 @@ cbuffer SimParams : register(b0) {
 
 	float density0;
 	float pressureCoeff;
-	float nearPressureCoeff;
 	float viscosity;
+	float p0;
 
 	float mass;
 	float radius;
@@ -201,19 +201,9 @@ float DensityKernel(float r, float h)
 	return SpikyKernelPow2(r, h);
 }
 
-float NearDensityKernel(float r, float h)
-{
-	return SpikyKernelPow3(r, h);
-}
-
 float DensityDerivative(float r, float h)
 {
 	return DerivativeSpikyPow2(r, h);
-}
-
-float NearDensityDerivative(float r, float h)
-{
-	return DerivativeSpikyPow3(r, h);
 }
 
 float PressureFromDensity(float density, float targetDensity, float pressureCoeff)
@@ -221,7 +211,3 @@ float PressureFromDensity(float density, float targetDensity, float pressureCoef
 	return (density - targetDensity) * pressureCoeff;
 }
 
-float NearPressureFromDensity(float nearDensity, float nearPressureCoeff)
-{
-	return nearDensity * nearPressureCoeff;
-}
