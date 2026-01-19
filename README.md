@@ -89,3 +89,12 @@ Suggested credit line (optional):
 ## License
 - Code: MIT License (see LICENSE)
 - Third-party assets: 각 에셋의 라이선스를 따릅니다(ambientCG HDRI는 CC0 1.0).
+
+---
+
+## Technical notes (high-level)
+- GPU neighbor search: spatial hashing + grouping + prefix-sum(cell ranges) (WIP)
+- Sorting: bitonic sort (naive → attempted optimization → reverted)
+- Data layout: switched AoS/SoA multiple times; SoA performed better in this pipeline
+- Debugging: PIX-based GPU buffer validation + UAV barriers between compute passes
+- Scale (at the time): ~100k particles (50×40×50), group size 512
