@@ -1,4 +1,4 @@
-#include "Common.hlsli"
+﻿#include "Common.hlsli"
 
 Texture2D g_texture : register(t0, space0);
 

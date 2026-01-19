@@ -1,4 +1,4 @@
-
+ï»¿
 cbuffer GlobalConstants : register(b0)
 {
     float4x4 view;
@@ -16,8 +16,8 @@ cbuffer MeshConstants : register(b1)
 
 struct VSInput
 {
-    float3 position : POSITION; // VBÀÇ ·ÎÄÃ ÁÂÇ¥ (-1 ~ +1)
-    // UV, Normal µî ´Ù¸¥ µ¥ÀÌÅÍ´Â ¶óÀÎ ·»´õ¸µ¿¡ ÇÊ¿ä ¾øÀ½
+    float3 position : POSITION; // VBì˜ ë¡œì»¬ ì¢Œí‘œ (-1 ~ +1)
+    // UV, Normal ë“± ë‹¤ë¥¸ ë°ì´í„°ëŠ” ë¼ì¸ ë Œë”ë§ì— í•„ìš” ì—†ìŒ
 };
 
 struct PSInput
@@ -29,10 +29,10 @@ PSInput main(VSInput input)
 {
     PSInput output;
 
-    // 1. ·ÎÄÃ ÁÂÇ¥ -> ¿ùµå ÁÂÇ¥ º¯È¯
+    // 1. ë¡œì»¬ ì¢Œí‘œ -> ì›”ë“œ ì¢Œí‘œ ë³€í™˜
     float4 worldPos = mul(float4(input.position, 1.0f), world);
 
-    // 2. ¿ùµå ÁÂÇ¥ -> Å¬¸³ °ø°£ º¯È¯
+    // 2. ì›”ë“œ ì¢Œí‘œ -> í´ë¦½ ê³µê°„ ë³€í™˜
     output.position = mul(worldPos, viewProj);
 
     return output;

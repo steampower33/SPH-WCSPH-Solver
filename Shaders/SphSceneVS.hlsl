@@ -1,4 +1,4 @@
-struct SamplingPSInput
+ï»¿struct SamplingPSInput
 {
     float4 position : SV_POSITION;
     float2 texcoord : TEXCOORD;
@@ -8,9 +8,9 @@ SamplingPSInput main(uint vertexID : SV_VertexID)
 {
     SamplingPSInput output;
 
-    output.texcoord = float2((vertexID << 1) & 2, vertexID & 2); // ¸¶¹ýÀÇ ºñÆ® ¿¬»ê!
+    output.texcoord = float2((vertexID << 1) & 2, vertexID & 2); // ë§ˆë²•ì˜ ë¹„íŠ¸ ì—°ì‚°!
     output.position = float4(output.texcoord * 2.0f - 1.0f, 0.0f, 1.0f);
-    output.position.y = -output.position.y; // YÃà ¹ÝÀü (DirectX Clip space)
+    output.position.y = -output.position.y; // Yì¶• ë°˜ì „ (DirectX Clip space)
 
     return output;
 }

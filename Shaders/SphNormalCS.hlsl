@@ -1,4 +1,4 @@
-
+ï»¿
 #define GROUP_SIZE_X 16
 #define GROUP_SIZE_Y 16
 
@@ -94,20 +94,20 @@ void main(uint3 gid : SV_GroupID,
         return;
     }
 
-    // ÀÌ¿ô ÁÂÇ¥´Â È­¸é ¹ÛÀ¸·Î ³ª°¡Áö ¾Êµµ·Ï clamp
+    // ì´ì›ƒ ì¢Œí‘œëŠ” í™”ë©´ ë°–ìœ¼ë¡œ ë‚˜ê°€ì§€ ì•Šë„ë¡ clamp
     int2 pixL = clamp(pix + int2(-1, 0), int2(0, 0), int2(width - 1, height - 1));
     int2 pixR = clamp(pix + int2(1, 0), int2(0, 0), int2(width - 1, height - 1));
     int2 pixU = clamp(pix + int2(0, -1), int2(0, 0), int2(width - 1, height - 1));
     int2 pixD = clamp(pix + int2(0, 1), int2(0, 0), int2(width - 1, height - 1));
 
-    // µª½º ÀĞ¾î¼­ 3D À§Ä¡ Àç±¸¼º
+    // ëìŠ¤ ì½ì–´ì„œ 3D ìœ„ì¹˜ ì¬êµ¬ì„±
     float3 posL = ReconstructPosition(pixL, SmoothedDepthMap.Load(int3(pixL, 0)));
     float3 posR = ReconstructPosition(pixR, SmoothedDepthMap.Load(int3(pixR, 0)));
     float3 posU = ReconstructPosition(pixU, SmoothedDepthMap.Load(int3(pixU, 0)));
     float3 posD = ReconstructPosition(pixD, SmoothedDepthMap.Load(int3(pixD, 0)));
     float3 posC = ReconstructPosition(pix, SmoothedDepthMap.Load(int3(pix, 0)));
 
-    // Áß¾Ó Â÷ºĞ: ¾çÂÊ Â÷ºĞÀ» ÇÕÃÄ¼­ ÁøÂ¥ ±â¿ï±â °è»ê
+    // ì¤‘ì•™ ì°¨ë¶„: ì–‘ìª½ ì°¨ë¶„ì„ í•©ì³ì„œ ì§„ì§œ ê¸°ìš¸ê¸° ê³„ì‚°
     float3 ddx = (posR - posL) * 0.5;
     float3 ddy = (posD - posU) * 0.5;
 
@@ -116,7 +116,7 @@ void main(uint3 gid : SV_GroupID,
     float4 outputNormal = float4(viewNormal * 0.5 + 0.5, 1.0);
     NormalMap[pix] = outputNormal;
 
-    // ½¦ÀÌµù -> ¿ùµå °ø°£
+    // ì‰ì´ë”© -> ì›”ë“œ ê³µê°„
     float3 worldNormal = normalize(mul(viewNormal, (float3x3)invView));
     float3 worldPos = mul(float4(posC, 1.0), invView).xyz;
     float3 V = normalize(eyeWorld - worldPos);
@@ -135,7 +135,7 @@ void main(uint3 gid : SV_GroupID,
 
     float3 beerTrans = exp(-waterDensity * thickness);
 
-    // ±¼Àı È¿°ú Àû¿ë
+    // êµ´ì ˆ íš¨ê³¼ ì ìš©
     float3 rayDirView = normalize(posC);
     float3 refractionDir = refract(rayDirView, viewNormal, IOR_AIR / IOR_WATER);
 

@@ -1,4 +1,4 @@
-
+﻿
 cbuffer RenderParams : register(b0)
 {
     float4x4 view;

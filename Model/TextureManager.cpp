@@ -1,4 +1,4 @@
-#include "TextureManager.h"
+ï»¿#include "TextureManager.h"
 
 TextureManager::TextureManager(
 	ComPtr<ID3D12Device> device,
@@ -171,10 +171,10 @@ void TextureManager::CreateEmptyTexture(
 	CD3DX12_CPU_DESCRIPTOR_HANDLE textureHandle,
 	UINT& textureCnt)
 {
-	// 1x1 °ËÁ¤ ÅØ½ºÃ³ µ¥ÀÌÅÍ (RGBA)
+	// 1x1 ê²€ì • í…ìŠ¤ì²˜ ë°ì´í„° (RGBA)
 	unsigned char blackPixel[4] = { 0, 0, 0, 0 };
 
-	// ÅØ½ºÃ³ ¸®¼Ò½º »ı¼º (GPU ±âº» Èü)
+	// í…ìŠ¤ì²˜ ë¦¬ì†ŒìŠ¤ ìƒì„± (GPU ê¸°ë³¸ í™)
 	auto textureDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM,
 		1, 1, 1, 0,
@@ -192,7 +192,7 @@ void TextureManager::CreateEmptyTexture(
 		IID_PPV_ARGS(&m_emptyTexture)
 	));
 
-	// ¾÷·Îµå Èü ¸®¼Ò½º »ı¼º
+	// ì—…ë¡œë“œ í™ ë¦¬ì†ŒìŠ¤ ìƒì„±
 	auto uploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_emptyTexture.Get(), 0, 1);
 	auto buffer = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
@@ -204,10 +204,10 @@ void TextureManager::CreateEmptyTexture(
 		nullptr,
 		IID_PPV_ARGS(&m_emptyTextureUploadHeap)));
 
-	// ÅØ½ºÃ³ µ¥ÀÌÅÍ º¹»ç
+	// í…ìŠ¤ì²˜ ë°ì´í„° ë³µì‚¬
 	D3D12_SUBRESOURCE_DATA textureData = {};
 	textureData.pData = blackPixel;
-	textureData.RowPitch = 4; // 1x1 ÇÈ¼¿, RGBA
+	textureData.RowPitch = 4; // 1x1 í”½ì…€, RGBA
 	textureData.SlicePitch = textureData.RowPitch;
 
 	UpdateSubresources(commandList.Get(), m_emptyTexture.Get(), m_emptyTextureUploadHeap.Get(), 0, 0, 1, &textureData);
@@ -217,16 +217,16 @@ void TextureManager::CreateEmptyTexture(
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.Format = m_emptyTexture->GetDesc().Format; // ÅØ½ºÃ³ÀÇ Æ÷¸Ë
+	srvDesc.Format = m_emptyTexture->GetDesc().Format; // í…ìŠ¤ì²˜ì˜ í¬ë§·
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
 	UINT size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	device->CreateShaderResourceView(
-		m_emptyTexture.Get(), // ÅØ½ºÃ³ ¸®¼Ò½º
-		&srvDesc, // SRV ¼³¸í
-		textureHandle // µğ½ºÅ©¸³ÅÍ ÈüÀÇ ÇÚµé
+		m_emptyTexture.Get(), // í…ìŠ¤ì²˜ ë¦¬ì†ŒìŠ¤
+		&srvDesc, // SRV ì„¤ëª…
+		textureHandle // ë””ìŠ¤í¬ë¦½í„° í™ì˜ í•¸ë“¤
 	);
 
 	textureCnt++;

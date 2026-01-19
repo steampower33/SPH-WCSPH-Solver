@@ -1,4 +1,4 @@
-
+﻿
 Texture2D<float4> Shaded : register(t0);
 
 SamplerState SamplerLinearClamp : register(s0);

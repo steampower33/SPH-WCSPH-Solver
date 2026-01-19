@@ -1,4 +1,4 @@
-#include "Model.h"
+Ôªø#include "Model.h"
 
 Model::Model(
 	ComPtr<ID3D12Device> device,
@@ -36,7 +36,7 @@ Model::Model(
 	m_radius = 1.0f;
 	m_boundingSphere = make_shared<BoundingSphere>(XMFLOAT3(m_position.x, m_position.y, m_position.z), m_radius);
 
-	// √ ±‚ world, invTrans º≥¡§
+	// Ï¥àÍ∏∞ world, invTrans ÏÑ§Ï†ï
 	XMVECTOR positionVector = XMLoadFloat4(&m_position);
 	XMMATRIX positionMatrix = XMMatrixTranslationFromVector(positionVector);
 	XMStoreFloat4x4(&m_world, positionMatrix);
@@ -72,8 +72,8 @@ void Model::Update()
 	XMVECTOR outScale, outRotQuat, outTrans;
 	XMMatrixDecompose(&outScale, &outRotQuat, &outTrans, oldWorld);
 
-	XMVECTOR newScale = XMLoadFloat3(&m_scale);           // ±‚¡∏ m_scale
-	XMVECTOR newTrans = XMLoadFloat4(&m_position);        // ±‚¡∏ m_position
+	XMVECTOR newScale = XMLoadFloat3(&m_scale);           // Í∏∞Ï°¥ m_scale
+	XMVECTOR newTrans = XMLoadFloat4(&m_position);        // Í∏∞Ï°¥ m_position
 
 	XMMATRIX S = XMMatrixScalingFromVector(newScale);
 	XMMATRIX R = XMMatrixRotationQuaternion(outRotQuat);

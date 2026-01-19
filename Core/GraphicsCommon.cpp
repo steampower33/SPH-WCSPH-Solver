@@ -1,4 +1,4 @@
-#include "GraphicsCommon.h"
+ï»¿#include "GraphicsCommon.h"
 
 namespace Graphics
 {
@@ -138,7 +138,7 @@ namespace Graphics
 
 void Graphics::InitDXC()
 {
-	// DXC ÃÊ±âÈ­
+	// DXC ì´ˆê¸°í™”
 	ThrowIfFailed(DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&utils)));
 	ThrowIfFailed(DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&compiler)));
 	ThrowIfFailed(utils->CreateDefaultIncludeHandler(&includeHandler));
@@ -376,7 +376,7 @@ void Graphics::InitSphSceneSignature(ComPtr<ID3D12Device>& device)
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplerDesc = {};
 	staticSamplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	staticSamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP; // È­¸é °¡ÀåÀÚ¸® Å¬·¥ÇÁ
+	staticSamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP; // í™”ë©´ ê°€ì¥ìë¦¬ í´ë¨í”„
 	staticSamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
 	staticSamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
 	staticSamplerDesc.MipLODBias = 0;
@@ -387,7 +387,7 @@ void Graphics::InitSphSceneSignature(ComPtr<ID3D12Device>& device)
 	staticSamplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
 	staticSamplerDesc.ShaderRegister = 0; // s0
 	staticSamplerDesc.RegisterSpace = 0;
-	staticSamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // ÇÈ¼¿ ¼ÎÀÌ´õ¿¡¼­¸¸ »ç¿ë
+	staticSamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // í”½ì…€ ì…°ì´ë”ì—ì„œë§Œ ì‚¬ìš©
 
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	rootSignatureDesc.Init_1_1(
@@ -415,14 +415,14 @@ void Graphics::InitPostProcessComputeRootSignature(ComPtr<ID3D12Device>& device)
 	}
 
 	CD3DX12_DESCRIPTOR_RANGE1 srvRange;
-	srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE); // ½½·Ô 0¿¡ SRV
+	srvRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE); // ìŠ¬ë¡¯ 0ì— SRV
 
 	CD3DX12_DESCRIPTOR_RANGE1 uavRange;
-	uavRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE); // ½½·Ô 0¿¡ UAV
+	uavRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE); // ìŠ¬ë¡¯ 0ì— UAV
 
 	CD3DX12_ROOT_PARAMETER1 rootParameters[3] = {};
-	rootParameters[0].InitAsDescriptorTable(1, &srvRange); // ÀÔ·Â ¸®¼Ò½º
-	rootParameters[1].InitAsDescriptorTable(1, &uavRange); // Ãâ·Â ´ë»ó
+	rootParameters[0].InitAsDescriptorTable(1, &srvRange); // ì…ë ¥ ë¦¬ì†ŒìŠ¤
+	rootParameters[1].InitAsDescriptorTable(1, &uavRange); // ì¶œë ¥ ëŒ€ìƒ
 	rootParameters[2].InitAsConstantBufferView(0, 0);
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[2] = {};
@@ -577,19 +577,19 @@ void Graphics::InitRasterizerStates()
 void Graphics::InitBlendStates()
 {
 	{
-		disabledBlend.AlphaToCoverageEnable = FALSE;  // ¸ÖÆ¼»ùÇÃ¸µ ¾ËÆÄ »ç¿ë ¿©ºÎ
-		disabledBlend.IndependentBlendEnable = FALSE; // ¸ğµç RenderTargetÀÌ µ¿ÀÏÇÑ ¼³Á¤ »ç¿ë
+		disabledBlend.AlphaToCoverageEnable = FALSE;  // ë©€í‹°ìƒ˜í”Œë§ ì•ŒíŒŒ ì‚¬ìš© ì—¬ë¶€
+		disabledBlend.IndependentBlendEnable = FALSE; // ëª¨ë“  RenderTargetì´ ë™ì¼í•œ ì„¤ì • ì‚¬ìš©
 
 		D3D12_RENDER_TARGET_BLEND_DESC disabledBlendDesc = {};
-		disabledBlendDesc.BlendEnable = FALSE; // ±âº»ÀûÀ¸·Î ºí·»µù ºñÈ°¼ºÈ­
-		disabledBlendDesc.LogicOpEnable = FALSE; // ³í¸® ¿¬»ê ºñÈ°¼ºÈ­
-		disabledBlendDesc.SrcBlend = D3D12_BLEND_ONE; // ¼Ò½º »ö»ó ±×´ë·Î »ç¿ë
-		disabledBlendDesc.DestBlend = D3D12_BLEND_ZERO; // ´ë»ó »ö»ó ¹«½Ã
-		disabledBlendDesc.BlendOp = D3D12_BLEND_OP_ADD; // ¼Ò½º + ´ë»ó
-		disabledBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE; // ¾ËÆÄ°ª ±×´ë·Î
-		disabledBlendDesc.DestBlendAlpha = D3D12_BLEND_ZERO; // ´ë»ó ¾ËÆÄ°ª ¹«½Ã
-		disabledBlendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD; // ¾ËÆÄ ÇÕ»ê
-		disabledBlendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL; // RGBA ¸ğµÎ ¾²±â È°¼ºÈ­
+		disabledBlendDesc.BlendEnable = FALSE; // ê¸°ë³¸ì ìœ¼ë¡œ ë¸”ë Œë”© ë¹„í™œì„±í™”
+		disabledBlendDesc.LogicOpEnable = FALSE; // ë…¼ë¦¬ ì—°ì‚° ë¹„í™œì„±í™”
+		disabledBlendDesc.SrcBlend = D3D12_BLEND_ONE; // ì†ŒìŠ¤ ìƒ‰ìƒ ê·¸ëŒ€ë¡œ ì‚¬ìš©
+		disabledBlendDesc.DestBlend = D3D12_BLEND_ZERO; // ëŒ€ìƒ ìƒ‰ìƒ ë¬´ì‹œ
+		disabledBlendDesc.BlendOp = D3D12_BLEND_OP_ADD; // ì†ŒìŠ¤ + ëŒ€ìƒ
+		disabledBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE; // ì•ŒíŒŒê°’ ê·¸ëŒ€ë¡œ
+		disabledBlendDesc.DestBlendAlpha = D3D12_BLEND_ZERO; // ëŒ€ìƒ ì•ŒíŒŒê°’ ë¬´ì‹œ
+		disabledBlendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD; // ì•ŒíŒŒ í•©ì‚°
+		disabledBlendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL; // RGBA ëª¨ë‘ ì“°ê¸° í™œì„±í™”
 
 		disabledBlend.RenderTarget[0] = disabledBlendDesc;
 		disabledBlend.RenderTarget[1] = disabledBlendDesc;
@@ -600,40 +600,40 @@ void Graphics::InitBlendStates()
 		rtBlendDesc.BlendEnable = TRUE;
 		rtBlendDesc.LogicOpEnable = FALSE;
 
-		// ¾ËÆÄ ºí·»µå ¼³Á¤ (BLEND_FACTOR »ç¿ë)
+		// ì•ŒíŒŒ ë¸”ë Œë“œ ì„¤ì • (BLEND_FACTOR ì‚¬ìš©)
 		rtBlendDesc.SrcBlend = D3D12_BLEND_BLEND_FACTOR;
 		rtBlendDesc.DestBlend = D3D12_BLEND_INV_BLEND_FACTOR;
 		rtBlendDesc.BlendOp = D3D12_BLEND_OP_ADD;
 
-		// ¾ËÆÄ Ã¤³Î ºí·»µå ¼³Á¤
+		// ì•ŒíŒŒ ì±„ë„ ë¸”ë Œë“œ ì„¤ì •
 		rtBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
 		rtBlendDesc.DestBlendAlpha = D3D12_BLEND_ONE;
 		rtBlendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 
-		// RGBA ÀüºÎ È°¼ºÈ­
+		// RGBA ì „ë¶€ í™œì„±í™”
 		rtBlendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-		mirrorBlend.AlphaToCoverageEnable = TRUE; // MSAA È°¼ºÈ­
+		mirrorBlend.AlphaToCoverageEnable = TRUE; // MSAA í™œì„±í™”
 		mirrorBlend.IndependentBlendEnable = FALSE;
 		mirrorBlend.RenderTarget[0] = rtBlendDesc;
 	}
 
 	{
 		D3D12_RENDER_TARGET_BLEND_DESC accumulateBSDesc = {};
-		accumulateBSDesc.BlendEnable = TRUE;                    // ºí·»µù È°¼ºÈ­
-		accumulateBSDesc.LogicOpEnable = FALSE;                 // ·ÎÁ÷ ¿¬»ê ºñÈ°¼ºÈ­ (Ç¥ÁØ ºí·»µù »ç¿ë)
-		accumulateBSDesc.SrcBlend = D3D12_BLEND_ONE;          // ¼Ò½º(Pixel Shader Ãâ·Â) °è¼ö = 1
-		accumulateBSDesc.DestBlend = D3D12_BLEND_ONE;         // ´ë»ó(Render Target ÇöÀç °ª) °è¼ö = 1
-		accumulateBSDesc.BlendOp = D3D12_BLEND_OP_ADD;        // ºí·»µù ¿¬»ê = µ¡¼À
-		accumulateBSDesc.SrcBlendAlpha = D3D12_BLEND_ONE;     // ¾ËÆÄ Ã¤³Î ¼Ò½º °è¼ö = 1
-		accumulateBSDesc.DestBlendAlpha = D3D12_BLEND_ONE;    // ¾ËÆÄ Ã¤³Î ´ë»ó °è¼ö = 1
-		accumulateBSDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;   // ¾ËÆÄ Ã¤³Î ºí·»µù ¿¬»ê = µ¡¼À
-		accumulateBSDesc.LogicOp = D3D12_LOGIC_OP_NOOP;       // ·ÎÁ÷ ¿¬»ê ºñÈ°¼ºÈ­ »óÅÂÀÌ¹Ç·Î ¹«½ÃµÊ
-		accumulateBSDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL; // ¸ğµç RGBA Ã¤³Î¿¡ ¾²±â Çã¿ë
+		accumulateBSDesc.BlendEnable = TRUE;                    // ë¸”ë Œë”© í™œì„±í™”
+		accumulateBSDesc.LogicOpEnable = FALSE;                 // ë¡œì§ ì—°ì‚° ë¹„í™œì„±í™” (í‘œì¤€ ë¸”ë Œë”© ì‚¬ìš©)
+		accumulateBSDesc.SrcBlend = D3D12_BLEND_ONE;          // ì†ŒìŠ¤(Pixel Shader ì¶œë ¥) ê³„ìˆ˜ = 1
+		accumulateBSDesc.DestBlend = D3D12_BLEND_ONE;         // ëŒ€ìƒ(Render Target í˜„ì¬ ê°’) ê³„ìˆ˜ = 1
+		accumulateBSDesc.BlendOp = D3D12_BLEND_OP_ADD;        // ë¸”ë Œë”© ì—°ì‚° = ë§ì…ˆ
+		accumulateBSDesc.SrcBlendAlpha = D3D12_BLEND_ONE;     // ì•ŒíŒŒ ì±„ë„ ì†ŒìŠ¤ ê³„ìˆ˜ = 1
+		accumulateBSDesc.DestBlendAlpha = D3D12_BLEND_ONE;    // ì•ŒíŒŒ ì±„ë„ ëŒ€ìƒ ê³„ìˆ˜ = 1
+		accumulateBSDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;   // ì•ŒíŒŒ ì±„ë„ ë¸”ë Œë”© ì—°ì‚° = ë§ì…ˆ
+		accumulateBSDesc.LogicOp = D3D12_LOGIC_OP_NOOP;       // ë¡œì§ ì—°ì‚° ë¹„í™œì„±í™” ìƒíƒœì´ë¯€ë¡œ ë¬´ì‹œë¨
+		accumulateBSDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL; // ëª¨ë“  RGBA ì±„ë„ì— ì“°ê¸° í—ˆìš©
 
-		// 2. Blend Description ¼³Á¤
-		accumulateBlend.AlphaToCoverageEnable = TRUE;                 // ¾ËÆÄ-Åõ-Ä¿¹ö¸®Áö ºñÈ°¼ºÈ­ (º¸Åë ´©Àû¿£ ºÒÇÊ¿ä)
-		accumulateBlend.IndependentBlendEnable = FALSE;                // ¸ğµç ·»´õ Å¸°Ù¿¡ µ¿ÀÏÇÑ
+		// 2. Blend Description ì„¤ì •
+		accumulateBlend.AlphaToCoverageEnable = TRUE;                 // ì•ŒíŒŒ-íˆ¬-ì»¤ë²„ë¦¬ì§€ ë¹„í™œì„±í™” (ë³´í†µ ëˆ„ì ì—” ë¶ˆí•„ìš”)
+		accumulateBlend.IndependentBlendEnable = FALSE;                // ëª¨ë“  ë Œë” íƒ€ê²Ÿì— ë™ì¼í•œ
 		accumulateBlend.RenderTarget[0] = accumulateBSDesc;
 	}
 
@@ -641,10 +641,10 @@ void Graphics::InitBlendStates()
 		D3D12_RENDER_TARGET_BLEND_DESC alphaBlendDesc = {};
 		alphaBlendDesc.BlendEnable = TRUE;
 		alphaBlendDesc.LogicOpEnable = FALSE;
-		alphaBlendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;      // ½ºÇÃ·§ ¾ËÆÄ
-		alphaBlendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;  // ³²Àº ¹è°æ
+		alphaBlendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;      // ìŠ¤í”Œë« ì•ŒíŒŒ
+		alphaBlendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;  // ë‚¨ì€ ë°°ê²½
 		alphaBlendDesc.BlendOp = D3D12_BLEND_OP_ADD;
-		alphaBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;            // ¾ËÆÄ´Â ´©Àû
+		alphaBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;            // ì•ŒíŒŒëŠ” ëˆ„ì 
 		alphaBlendDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
 		alphaBlendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 		alphaBlendDesc.LogicOp = D3D12_LOGIC_OP_CLEAR;
@@ -684,7 +684,7 @@ void Graphics::InitDepthStencilStates()
 		basicDS.StencilReadMask = 0xFF;
 		basicDS.StencilWriteMask = 0xFF;
 
-		// FrontFace ¼³Á¤
+		// FrontFace ì„¤ì •
 		basicDS.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
 		basicDS.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
 		basicDS.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
@@ -710,7 +710,7 @@ void Graphics::InitDepthStencilStates()
 		maskDS.StencilReadMask = 0xFF;
 		maskDS.StencilWriteMask = 0xFF;
 
-		// FrontFace ¼³Á¤
+		// FrontFace ì„¤ì •
 		maskDS.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
 		maskDS.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
 		maskDS.FrontFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
@@ -1107,10 +1107,10 @@ void Graphics::CreateShader(
 	DxcBuffer buffer = {};
 	buffer.Ptr = source->GetBufferPointer();
 	buffer.Size = source->GetBufferSize();
-	buffer.Encoding = DXC_CP_ACP; // ±âº» ÀÎÄÚµù
+	buffer.Encoding = DXC_CP_ACP; // ê¸°ë³¸ ì¸ì½”ë”©
 
 	std::filesystem::path filepath(filename);
-	std::wstring shaderName = filepath.stem().wstring(); // È®ÀåÀÚ Á¦°ÅµÈ ÆÄÀÏ ÀÌ¸§
+	std::wstring shaderName = filepath.stem().wstring(); // í™•ì¥ì ì œê±°ëœ íŒŒì¼ ì´ë¦„
 
 	//std::wcout << L"Shader Name: " << shaderName << std::endl;
 
@@ -1140,10 +1140,10 @@ void Graphics::CreateShader(
 	ComPtr<IDxcResult> result;
 	ThrowIfFailed(compiler->Compile(&buffer, args.data(), static_cast<UINT32>(args.size()), includeHandler.Get(), IID_PPV_ARGS(&result)));
 
-	// ÄÄÆÄÀÏµÈ ¼ÎÀÌ´õ °¡Á®¿À±â
+	// ì»´íŒŒì¼ëœ ì…°ì´ë” ê°€ì ¸ì˜¤ê¸°
 	result->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 
-	// PDB ÆÄÀÏ Ãâ·Â
+	// PDB íŒŒì¼ ì¶œë ¥
 	ComPtr<IDxcBlob> pdbBlob;
 	result->GetOutput(DXC_OUT_PDB, IID_PPV_ARGS(&pdbBlob), nullptr);
 	if (pdbBlob) {
@@ -1152,12 +1152,35 @@ void Graphics::CreateShader(
 		pdbFile.close();
 	}
 
-	// ¼ÎÀÌ´õ ÄÄÆÄÀÏ ¿¡·¯ È®ÀÎ
+	// 1. ì—ëŸ¬ ë©”ì‹œì§€ í™•ì¸ (ê°€ì¥ ì¤‘ìš”)
 	ComPtr<IDxcBlobUtf8> errors;
 	result->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), nullptr);
 
 	if (errors && errors->GetStringLength() > 0) {
-		std::wcout << targetProfile;
-		std::cout << " Compilation Errors:\n" << errors->GetStringPointer() << std::endl;
+		// ê²½ê³ (Warning)ë§Œ ìˆì–´ë„ ì—¬ê¸°ì— ê±¸ë¦´ ìˆ˜ ìˆìœ¼ë¯€ë¡œ ë‚´ìš©ì„ í™•ì¸í•´ì•¼ í•¨
+		// í•˜ì§€ë§Œ ë³´í†µ ì—ëŸ¬ê°€ í¬í•¨ë˜ë¯€ë¡œ ì¶œë ¥
+		std::wcout << L"========== Shader Compilation Error: " << filename << L" ==========" << std::endl;
+		std::cout << errors->GetStringPointer() << std::endl;
+		std::wcout << L"============================================================" << std::endl;
+	}
+
+	// 2. ì»´íŒŒì¼ ì„±ê³µ ì—¬ë¶€ í™•ì¸ (HRESULT ìƒíƒœ ì²´í¬)
+	HRESULT hrStatus;
+	result->GetStatus(&hrStatus);
+	if (FAILED(hrStatus))
+	{
+		// ì»´íŒŒì¼ ì‹¤íŒ¨ ì‹œ ì˜ˆì™¸ ë°œìƒì‹œì¼œì„œ í”„ë¡œê·¸ë¨ ì¤‘ë‹¨
+		// ì½˜ì†”ì°½ì˜ ì—ëŸ¬ ë©”ì‹œì§€ë¥¼ ë³¼ ìˆ˜ ìˆê²Œ ë¨
+		ThrowIfFailed(hrStatus);
+	}
+
+	// 3. ì…°ì´ë” ë°”ì´ë„ˆë¦¬ ê°€ì ¸ì˜¤ê¸°
+	result->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
+
+	// 4. Blobì´ ì œëŒ€ë¡œ ìƒì„±ë˜ì—ˆëŠ”ì§€ í™•ì¸
+	if (!shaderBlob)
+	{
+		// ì—¬ê¸°ê¹Œì§€ ì™”ëŠ”ë° Blobì´ ì—†ìœ¼ë©´ ì¹˜ëª…ì  ì˜¤ë¥˜
+		throw std::runtime_error("Failed to create shader blob.");
 	}
 }

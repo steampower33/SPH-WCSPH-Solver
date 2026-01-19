@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+﻿#include "SphCommon.hlsli"
 
 RWStructuredBuffer<uint>  CellCount : register(u7);
 

@@ -1,4 +1,4 @@
-#include "GeometryGenerator.h"
+ï»¿#include "GeometryGenerator.h"
 
 vector<MeshData> GeometryGenerator::ReadFromFile(string basePath, string filename)
 {
@@ -126,24 +126,24 @@ MeshData GeometryGenerator::MakeBoundsBox() {
 
 	meshData.vertices =
 	{
-		// °¡±î¿î¸é
-		{ -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f }, // ¿Ş ¾Æ
-		{ -1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f }, // ¿Ş À§
-		{  1.0f,  1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f }, // ¿À À§
-		{  1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f }, // ¿À ¾Æ
+		// ê°€ê¹Œìš´ë©´
+		{ -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f }, // ì™¼ ì•„
+		{ -1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f }, // ì™¼ ìœ„
+		{  1.0f,  1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f }, // ì˜¤ ìœ„
+		{  1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f }, // ì˜¤ ì•„
 
-		// ¸Õ ¸é
-		{  1.0f, -1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f,  1.0f }, // ¿Ş ¾Æ
-		{  1.0f,  1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  1.0f }, // ¿Ş À§
-		{ -1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f,  1.0f }, // ¿À À§
-		{ -1.0f, -1.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f,  1.0f }, // ¿À ¾Æ
+		// ë¨¼ ë©´
+		{  1.0f, -1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f,  1.0f }, // ì™¼ ì•„
+		{  1.0f,  1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  1.0f }, // ì™¼ ìœ„
+		{ -1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f,  1.0f }, // ì˜¤ ìœ„
+		{ -1.0f, -1.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f,  1.0f }, // ì˜¤ ì•„
 	};
 
-	// 12°³ ¶óÀÎ Á¤ÀÇ
+	// 12ê°œ ë¼ì¸ ì •ì˜
 	meshData.indices = {
-		0, 1, 1, 2, 2, 3, 3, 0, // Á¤¸é
-		4, 5, 5, 6, 6, 7, 7, 4, // µŞ¸é
-		0, 7, 1, 6, 2, 5, 3, 4,// ³ª¸ÓÁö
+		0, 1, 1, 2, 2, 3, 3, 0, // ì •ë©´
+		4, 5, 5, 6, 6, 7, 7, 4, // ë’·ë©´
+		0, 7, 1, 6, 2, 5, 3, 4,// ë‚˜ë¨¸ì§€
 	};
 
 	return meshData;
@@ -280,10 +280,10 @@ MeshData GeometryGenerator::MakeSphere(const float radius,
 
 void GeometryGenerator::CalculateTangents(MeshData& meshData)
 {
-	// Á¤Á¡º° ´©Àû ÅºÁ¨Æ® ÃÊ±âÈ­
+	// ì •ì ë³„ ëˆ„ì  íƒ„ì  íŠ¸ ì´ˆê¸°í™”
 	std::vector<XMVECTOR> accumulatedTangents(meshData.vertices.size(), XMVectorZero());
 
-	// »ï°¢Çü ´ÜÀ§·Î ÅºÁ¨Æ® °è»ê
+	// ì‚¼ê°í˜• ë‹¨ìœ„ë¡œ íƒ„ì  íŠ¸ ê³„ì‚°
 	for (size_t i = 0; i < meshData.indices.size(); i += 3) {
 		uint32_t i0 = meshData.indices[i];
 		uint32_t i1 = meshData.indices[i + 1];
@@ -293,7 +293,7 @@ void GeometryGenerator::CalculateTangents(MeshData& meshData)
 		Vertex& v1 = meshData.vertices[i1];
 		Vertex& v2 = meshData.vertices[i2];
 
-		// DirectXMath¸¦ »ç¿ëÇÑ º¤ÅÍ ¿¬»ê
+		// DirectXMathë¥¼ ì‚¬ìš©í•œ ë²¡í„° ì—°ì‚°
 		XMVECTOR pos0 = XMLoadFloat3(&v0.position);
 		XMVECTOR pos1 = XMLoadFloat3(&v1.position);
 		XMVECTOR pos2 = XMLoadFloat3(&v2.position);
@@ -323,13 +323,13 @@ void GeometryGenerator::CalculateTangents(MeshData& meshData)
 			r
 		);
 
-		// °¢ Á¤Á¡ÀÇ ÅºÁ¨Æ®¿¡ ´©Àû
+		// ê° ì •ì ì˜ íƒ„ì  íŠ¸ì— ëˆ„ì 
 		accumulatedTangents[i0] = XMVectorAdd(accumulatedTangents[i0], tangent);
 		accumulatedTangents[i1] = XMVectorAdd(accumulatedTangents[i1], tangent);
 		accumulatedTangents[i2] = XMVectorAdd(accumulatedTangents[i2], tangent);
 	}
 
-	// Á¤Á¡¸¶´Ù ´©ÀûµÈ ÅºÁ¨Æ®¸¦ Á¤±ÔÈ­ÇÏ¿© ÀúÀå
+	// ì •ì ë§ˆë‹¤ ëˆ„ì ëœ íƒ„ì  íŠ¸ë¥¼ ì •ê·œí™”í•˜ì—¬ ì €ì¥
 	for (size_t i = 0; i < meshData.vertices.size(); ++i) {
 		XMVECTOR tangent = XMVector3Normalize(accumulatedTangents[i]);
 		XMStoreFloat3(&meshData.vertices[i].tangentModel, tangent);

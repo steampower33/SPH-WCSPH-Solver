@@ -1,4 +1,4 @@
-
+ï»¿
 #define PI 3.1415926535
 
 struct ParticleHash
@@ -78,7 +78,7 @@ cbuffer SimParams : register(b0) {
 
 uint GetCellKeyFromCellID(int3 cellID)
 {
-	// Å« ¼Ò¼ö¸¦ »ç¿ëÇÏ¿© ÁÂÇ¥¸¦ ¼¯¾îÁÜ
+	// í° ì†Œìˆ˜ë¥¼ ì‚¬ìš©í•˜ì—¬ ì¢Œí‘œë¥¼ ì„ì–´ì¤Œ
 	const uint p1 = 73856093;
 	const uint p2 = 19349663;
 	const uint p3 = 83492791;
@@ -92,17 +92,17 @@ uint GetCellKeyFromCellID(int3 cellID)
 	return hashValue % cellCnt;
 }
 
-// °£´ÜÇÑ Á¤¼ö ÇØ½Ã ÇÔ¼ö (°á°ú¸¦ [0, 1] ¹üÀ§ÀÇ float·Î º¯È¯)
+// ê°„ë‹¨í•œ ì •ìˆ˜ í•´ì‹œ í•¨ìˆ˜ (ê²°ê³¼ë¥¼ [0, 1] ë²”ìœ„ì˜ floatë¡œ ë³€í™˜)
 float random(uint seed)
 {
 	seed = seed * 747796405u + 2891336453u;
 	uint result = ((seed >> ((seed >> 28u) + 4u)) ^ seed) * 277803737u;
 	result = (result >> 22u) ^ result;
-	// °á°ú¸¦ [0, 1] ¹üÀ§ÀÇ float·Î Á¤±ÔÈ­
-	return float(result) / 4294967295.0f; // 2^32 - 1 ·Î ³ª´®
+	// ê²°ê³¼ë¥¼ [0, 1] ë²”ìœ„ì˜ floatë¡œ ì •ê·œí™”
+	return float(result) / 4294967295.0f; // 2^32 - 1 ë¡œ ë‚˜ëˆ”
 }
 
-// 3Â÷¿ø Poly6 Ä¿³Î ÇÔ¼ö
+// 3ì°¨ì› Poly6 ì»¤ë„ í•¨ìˆ˜
 float Poly6Kernel(float r, float h)
 {
 	if (r >= h) return 0.0;
@@ -111,7 +111,7 @@ float Poly6Kernel(float r, float h)
 	return C * pow((h * h - r * r), 3);
 }
 
-// 3Â÷¿ø Spiky Gradient Ä¿³Î ÇÔ¼ö
+// 3ì°¨ì› Spiky Gradient ì»¤ë„ í•¨ìˆ˜
 float SpikyGradient(float r, float h)
 {
 	if (r >= h) return 0.0;
@@ -121,7 +121,7 @@ float SpikyGradient(float r, float h)
 	return C_grad * pow(h - r, 2.0);
 }
 
-// 3Â÷¿ø Viscosity Laplacian Ä¿³Î ÇÔ¼ö
+// 3ì°¨ì› Viscosity Laplacian ì»¤ë„ í•¨ìˆ˜
 float ViscosityLaplacian(float r, float h)
 {
 	if (r >= h) return 0.0;

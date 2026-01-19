@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -26,7 +26,7 @@ public:
 	static HWND m_hwnd;
 
 private:
-	// À©µµ¿ì ÇÁ·Î½ÃÀú ¼±¾ğ
+	// ìœˆë„ìš° í”„ë¡œì‹œì € ì„ ì–¸
 	static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	static std::wstring GetLatestWinPixGpuCapturerPath();

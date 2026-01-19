@@ -1,4 +1,4 @@
-#include "Common.hlsli"
+﻿#include "Common.hlsli"
 
 Texture2D g_texture[] : register(t0, space1);
 
@@ -13,17 +13,17 @@ float4 main(SamplingPSInput input) : SV_TARGET
     float x = input.texcoord.x;
     float y = input.texcoord.y;
     
-    float3 a = g_texture[index].Sample(linearClampSampler, float2(x - dx, y + dy)).rgb;
-    float3 b = g_texture[index].Sample(linearClampSampler, float2(x, y + dy)).rgb;
-    float3 c = g_texture[index].Sample(linearClampSampler, float2(x + dx, y + dy)).rgb;
+    float3 a = g_texture[index].Sample(linearClampSampler, float2(x - pixelStepX, y + pixelStepY)).rgb;
+    float3 b = g_texture[index].Sample(linearClampSampler, float2(x, y + pixelStepY)).rgb;
+    float3 c = g_texture[index].Sample(linearClampSampler, float2(x + pixelStepX, y + pixelStepY)).rgb;
     
-    float3 d = g_texture[index].Sample(linearClampSampler, float2(x - dx, y)).rgb;
+    float3 d = g_texture[index].Sample(linearClampSampler, float2(x - pixelStepX, y)).rgb;
     float3 e = g_texture[index].Sample(linearClampSampler, float2(x, y)).rgb;
-    float3 f = g_texture[index].Sample(linearClampSampler, float2(x + dx, y)).rgb;
+    float3 f = g_texture[index].Sample(linearClampSampler, float2(x + pixelStepX, y)).rgb;
     
-    float3 g = g_texture[index].Sample(linearClampSampler, float2(x - dx, y - dy)).rgb;
-    float3 h = g_texture[index].Sample(linearClampSampler, float2(x, y - dy)).rgb;
-    float3 i = g_texture[index].Sample(linearClampSampler, float2(x + dx, y - dy)).rgb;
+    float3 g = g_texture[index].Sample(linearClampSampler, float2(x - pixelStepX, y - pixelStepY)).rgb;
+    float3 h = g_texture[index].Sample(linearClampSampler, float2(x, y - pixelStepY)).rgb;
+    float3 i = g_texture[index].Sample(linearClampSampler, float2(x + pixelStepX, y - pixelStepY)).rgb;
     
     float3 color = e * 4.0;
     color += (b + d + f + h) * 2.0;

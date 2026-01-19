@@ -1,4 +1,4 @@
-#include "ModelLoader.h"
+ï»¿#include "ModelLoader.h"
 
 void ModelLoader::Load(std::string basePath, std::string filename)
 {
@@ -19,10 +19,10 @@ void ModelLoader::Load(std::string basePath, std::string filename)
 		assert(false && "Model Node does not exist!");
 	}
 
-	// ÃÊ±â º¯È¯ Çà·Ä(´ÜÀ§ Çà·Ä)
+	// ì´ˆê¸° ë³€í™˜ í–‰ë ¬(ë‹¨ìœ„ í–‰ë ¬)
 	XMMATRIX identityMatrix = XMMatrixIdentity();
 
-	// ·çÆ® ³ëµåºÎÅÍ ¼øÈ¸ ½ÃÀÛ
+	// ë£¨íŠ¸ ë…¸ë“œë¶€í„° ìˆœíšŒ ì‹œì‘
 	ProcessNode(pScene->mRootNode, pScene, identityMatrix);
 }
 
@@ -47,29 +47,29 @@ void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, XMMATRIX paren
 		ProcessNode(node->mChildren[i], scene, parentTransform);
 	}
 
-	// 3) ÀÌ ³ëµå¿¡ ¿¬°áµÈ ¸ğµç ¸Ş½Ã¸¦ Ã³¸®
+	// 3) ì´ ë…¸ë“œì— ì—°ê²°ëœ ëª¨ë“  ë©”ì‹œë¥¼ ì²˜ë¦¬
 	for (uint32_t i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		MeshData newMesh = this->ProcessMesh(mesh, scene);
 
-		// ¸Ş½ÃÀÇ ¸ğµç Á¤Á¡¿¡ "worldMatrix"¸¦ Àû¿ë
+		// ë©”ì‹œì˜ ëª¨ë“  ì •ì ì— "worldMatrix"ë¥¼ ì ìš©
 		for (auto& v : newMesh.vertices)
 		{
 			XMVECTOR posVec = XMLoadFloat3(&v.position);
-			// À§Ä¡ º¯È¯
+			// ìœ„ì¹˜ ë³€í™˜
 			posVec = XMVector3Transform(posVec, worldMatrix);
 			XMStoreFloat3(&v.position, posVec);
 		}
 
-		// (¸¸¾à ³ë¸Öµµ ºÎ¸ğ/³ëµå º¯È¯ Àû¿ëÀÌ ÇÊ¿äÇÏ¸é XMVector3TransformNormal)
-		// ´Ü, ºñ±ÕÀÏ ½ºÄÉÀÏ µî ÀÖÀ¸¸é InverseTranspose µîÀ» ½á¾ß ÇÔ
-		// ¿©±â¼± ³ë¸ÖÀº Assimp°¡ ÀÌ¹Ì ·ÎÄÃ °ø°£¿¡¼­ ±¸ÇØÁÖ¹Ç·Î,
-		// ÇÊ¿äÇÏ´Ù¸é "XMMatrixInverseTranspose(worldMatrix)" °è»ê ÈÄ °öÇÏ±â.
+		// (ë§Œì•½ ë…¸ë©€ë„ ë¶€ëª¨/ë…¸ë“œ ë³€í™˜ ì ìš©ì´ í•„ìš”í•˜ë©´ XMVector3TransformNormal)
+		// ë‹¨, ë¹„ê· ì¼ ìŠ¤ì¼€ì¼ ë“± ìˆìœ¼ë©´ InverseTranspose ë“±ì„ ì¨ì•¼ í•¨
+		// ì—¬ê¸°ì„  ë…¸ë©€ì€ Assimpê°€ ì´ë¯¸ ë¡œì»¬ ê³µê°„ì—ì„œ êµ¬í•´ì£¼ë¯€ë¡œ,
+		// í•„ìš”í•˜ë‹¤ë©´ "XMMatrixInverseTranspose(worldMatrix)" ê³„ì‚° í›„ ê³±í•˜ê¸°.
 
 		meshes.push_back(newMesh);
 
-		// 4) ÀÚ½Ä ³ëµå Ã³¸® (Àç±Í)
+		// 4) ìì‹ ë…¸ë“œ ì²˜ë¦¬ (ì¬ê·€)
 		for (uint32_t i = 0; i < node->mNumChildren; i++)
 		{
 			ProcessNode(node->mChildren[i], scene, worldMatrix);
@@ -89,9 +89,9 @@ MeshData ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<uint32_t> indices;
 
 	vertices.reserve(mesh->mNumVertices);
-	indices.reserve(mesh->mNumFaces * 3); // Triangulate·Î ÀÎÇØ Face´Â º¸Åë 3 ÀÎµ¦½º
+	indices.reserve(mesh->mNumFaces * 3); // Triangulateë¡œ ì¸í•´ FaceëŠ” ë³´í†µ 3 ì¸ë±ìŠ¤
 
-	// 1) Á¤Á¡ Á¤º¸
+	// 1) ì •ì  ì •ë³´
 	for (uint32_t i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex = {};
@@ -117,13 +117,13 @@ MeshData ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 				normal.z = mesh->mNormals[i].z;
 			}
 
-			// Á¤±ÔÈ­
+			// ì •ê·œí™”
 			XMVECTOR n = XMLoadFloat3(&normal);
 			n = XMVector3Normalize(n);
 			XMStoreFloat3(&vertex.normal, n);
 		}
 
-		// UV (Ã¤³Î 0¸¸ »ç¿ë)
+		// UV (ì±„ë„ 0ë§Œ ì‚¬ìš©)
 		if (mesh->mTextureCoords[0])
 		{
 			vertex.texcoord.x = (float)mesh->mTextureCoords[0][i].x;
@@ -133,7 +133,7 @@ MeshData ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertices.push_back(vertex);
 	}
 
-	// 2) ÀÎµ¦½º Á¤º¸
+	// 2) ì¸ë±ìŠ¤ ì •ë³´
 	for (uint32_t i = 0; i < mesh->mNumFaces; i++)
 	{
 		const aiFace& face = mesh->mFaces[i];
@@ -143,7 +143,7 @@ MeshData ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	// 3) ¸ÓÆ¼¸®¾ó / ÅØ½ºÃ³
+	// 3) ë¨¸í‹°ë¦¬ì–¼ / í…ìŠ¤ì²˜
 	MeshData newMesh;
 	newMesh.vertices = vertices;
 	newMesh.indices = indices;

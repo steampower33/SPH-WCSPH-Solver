@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+﻿#include "SphCommon.hlsli"
 
 StructuredBuffer<float3> predictedPositions : register(t1);
 StructuredBuffer<float> spawnTimes : register(t6);

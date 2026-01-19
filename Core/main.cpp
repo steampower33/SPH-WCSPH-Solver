@@ -1,18 +1,18 @@
-#include "EngineBase.h"
+ï»¿#include "EngineBase.h"
 #include "MainEngine.h"
 #include "WinApp.h"
 
-// EXE ½ÇÇà ½Ã ½ÇÇà °æ·Î¸¦ °­Á¦·Î ÇÁ·ÎÁ§Æ® ·çÆ®·Î º¯°æ
+// EXE ì‹¤í–‰ ì‹œ ì‹¤í–‰ ê²½ë¡œë¥¼ ê°•ì œë¡œ í”„ë¡œì íŠ¸ ë£¨íŠ¸ë¡œ ë³€ê²½
 void SetExecutionPathToProjectRoot() {
-    // ÇöÀç ½ÇÇà ÁßÀÎ EXEÀÇ ÀüÃ¼ °æ·Î °¡Á®¿À±â
+    // í˜„ì¬ ì‹¤í–‰ ì¤‘ì¸ EXEì˜ ì „ì²´ ê²½ë¡œ ê°€ì ¸ì˜¤ê¸°
     wchar_t exePath[MAX_PATH];
     GetModuleFileName(NULL, exePath, MAX_PATH);
 
-    // EXE°¡ ÀÖ´Â Æú´õ ±âÁØÀ¸·Î ÇÁ·ÎÁ§Æ® ·çÆ®(`LSMEngine`) Ã£±â
+    // EXEê°€ ìˆëŠ” í´ë” ê¸°ì¤€ìœ¼ë¡œ í”„ë¡œì íŠ¸ ë£¨íŠ¸(`LSMEngine`) ì°¾ê¸°
     std::filesystem::path exeDir = std::filesystem::path(exePath).parent_path();
-    std::filesystem::path projectRoot = exeDir.parent_path().parent_path();  // `x64/Release`¿¡¼­ µÎ ´Ü°è À§·Î ÀÌµ¿
+    std::filesystem::path projectRoot = exeDir.parent_path().parent_path();  // `x64/Release`ì—ì„œ ë‘ ë‹¨ê³„ ìœ„ë¡œ ì´ë™
 
-    // ½ÇÇà °æ·Î º¯°æ
+    // ì‹¤í–‰ ê²½ë¡œ ë³€ê²½
     std::wcout << L"[DEBUG] Changing execution path to: " << projectRoot << std::endl;
     std::filesystem::current_path(projectRoot);
 }
@@ -25,7 +25,7 @@ int wWinMain(
 ) {
     SetExecutionPathToProjectRoot();
 
-    AllocConsole(); // »õ·Î¿î ÄÜ¼Ö Ã¢ »ı¼º
+    AllocConsole(); // ìƒˆë¡œìš´ ì½˜ì†” ì°½ ìƒì„±
     FILE* pStreamOut = nullptr;
     freopen_s(&pStreamOut, "CONOUT$", "w", stdout);
 

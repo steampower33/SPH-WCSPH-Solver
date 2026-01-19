@@ -1,4 +1,4 @@
-#include "EngineBase.h"
+Ôªø#include "EngineBase.h"
 
 #include "WinApp.h"
 
@@ -215,8 +215,8 @@ void EngineBase::InitializeDescriptorHeaps()
 
 		D3D12_RESOURCE_DESC depthStencilDesc = {};
 		depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-		depthStencilDesc.Width = static_cast<UINT>(m_width);; // »≠∏È ≥ ∫Ò
-		depthStencilDesc.Height = static_cast<UINT>(m_height); // »≠∏È ≥Ù¿Ã
+		depthStencilDesc.Width = static_cast<UINT>(m_width);; // ÌôîÎ©¥ ÎÑàÎπÑ
+		depthStencilDesc.Height = static_cast<UINT>(m_height); // ÌôîÎ©¥ ÎÜíÏù¥
 		depthStencilDesc.DepthOrArraySize = 1;
 		depthStencilDesc.MipLevels = 1;
 		depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -238,7 +238,7 @@ void EngineBase::InitializeDescriptorHeaps()
 			IID_PPV_ARGS(&m_dsBuffer)
 		));
 
-		// DSV «⁄µÈ ª˝º∫
+		// DSV Ìï∏Îì§ ÏÉùÏÑ±
 		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;

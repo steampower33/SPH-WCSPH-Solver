@@ -1,4 +1,4 @@
-
+﻿
 #include "DescriptorHeapAllocator.h"
 
 HeapAllocator::HeapAllocator() {}

@@ -1,4 +1,4 @@
-#include "Common.hlsli"
+﻿#include "Common.hlsli"
 
 Texture2D texture[100] : register(t0, space0);
 TextureCube skyboxTexture[10] : register(t100, space0);

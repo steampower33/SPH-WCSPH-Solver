@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+﻿#include "SphCommon.hlsli"
 
 RWStructuredBuffer<float3> Positions : register(u0);
 RWStructuredBuffer<float3> Velocities : register(u2);

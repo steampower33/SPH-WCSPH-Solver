@@ -1,4 +1,4 @@
-#ifndef __COMMON_HLSLI__
+ï»¿#ifndef __COMMON_HLSLI__
 #define __COMMON_HLSLI__
 
 #define MAX_LIGHTS 2
@@ -30,11 +30,11 @@ struct PSInput
     float2 texcoord : TEXCOORD;
 };
 
-// Á¶¸í
+// ì¡°ëª…
 struct Light
 {
-    float4x4 viewProj; // ±×¸²ÀÚ ·»´õ¸µ¿¡ ÇÊ¿ä
-    float4x4 invProj; // ±×¸²ÀÚ ·»´õ¸µ µğ¹ö±ë¿ë
+    float4x4 viewProj; // ê·¸ë¦¼ì ë Œë”ë§ì— í•„ìš”
+    float4x4 invProj; // ê·¸ë¦¼ì ë Œë”ë§ ë””ë²„ê¹…ìš©
 
     float3 radiance;
     float fallOffStart;
@@ -152,8 +152,8 @@ cbuffer CubemapIndexConstants : register(b3)
 
 cbuffer SamplingConstants : register(b4)
 {
-    float dx;
-    float dy;
+    float pixelStepX;
+    float pixelStepY;
     float strength;
     float exposure;
     

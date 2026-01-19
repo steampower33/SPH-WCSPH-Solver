@@ -1,4 +1,4 @@
-#include "Common.hlsli"
+ï»¿#include "Common.hlsli"
 
 Texture2D g_texture[50] : register(t0, space0);
 
@@ -18,8 +18,8 @@ PSInput main(VSInput input)
     
     if (useHeightMap && heightIndex != 0)
     {
-        // VertexShader¿¡¼­´Â SampleLevel »ç¿ë
-        // HeightmapÀº º¸Åë Èæ¹éÀÌ¶ó¼­ ¸¶Áö¸·¿¡ .r·Î float ÇÏ³ª¸¸ »ç¿ë
+        // VertexShaderì—ì„œëŠ” SampleLevel ì‚¬ìš©
+        // Heightmapì€ ë³´í†µ í‘ë°±ì´ë¼ì„œ ë§ˆì§€ë§‰ì— .rë¡œ float í•˜ë‚˜ë§Œ ì‚¬ìš©
         float height = g_texture[heightIndex].SampleLevel(linearWrapSampler, input.texcoord, 0).r;
         height = height * 2.0 - 1.0;
         pos += float4(output.normalWorld * height * heightScale, 0.0);

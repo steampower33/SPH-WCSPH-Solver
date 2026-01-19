@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+ï»¿#include "SphCommon.hlsli"
 
 StructuredBuffer<uint> CellCount : register(t7);
 RWStructuredBuffer<uint> LocalScan : register(u9);
@@ -65,14 +65,14 @@ void main(uint tid       : SV_GroupThreadID,
     GroupMemoryBarrierWithGroupSync();
 
     if (tid == GROUP_SIZE_X - 1) {
-        // ÇöÀç shMem[tid]´Â ¸¶Áö¸· ¿ä¼ÒÀÇ exclusive sum
-        // ¿©±â¿¡ ¸¶Áö¸· ¿ä¼ÒÀÇ ¿øº» °ªÀ» ´õÇÏ¸é ±×·ì ÀüÃ¼ÀÇ inclusive sum (ÃÑ ÇÕ°è)ÀÌ µÊ
-        uint totalGroupSum = shMem[tid] + localValue; // localValue´Â tid=511 ½º·¹µåÀÇ ¿øº» °ª
+        // í˜„ìž¬ shMem[tid]ëŠ” ë§ˆì§€ë§‰ ìš”ì†Œì˜ exclusive sum
+        // ì—¬ê¸°ì— ë§ˆì§€ë§‰ ìš”ì†Œì˜ ì›ë³¸ ê°’ì„ ë”í•˜ë©´ ê·¸ë£¹ ì „ì²´ì˜ inclusive sum (ì´ í•©ê³„)ì´ ë¨
+        uint totalGroupSum = shMem[tid] + localValue; // localValueëŠ” tid=511 ìŠ¤ë ˆë“œì˜ ì›ë³¸ ê°’
 
-        // ¸¸¾à ±×·ìÀÌ Ã³¸®ÇÏ´Â ¸¶Áö¸· ÀÎµ¦½º°¡ cellCnt¸¦ ³Ñ¾î¼­´Â °æ¿ì,
-        // ÇØ´ç ±×·ìÀÇ ½ÇÁ¦ ÃÑ ÇÕÀº ¸¶Áö¸· ¿ä¼ÒÀÇ exclusive sum + ¸¶Áö¸· ¿ä¼Ò °ªÀ¸·Î °è»êµÈ °ª°ú ´Ù¸¦ ¼ö ÀÖÀ½.
-        // ±×·¯³ª ÀÏ¹ÝÀûÀ¸·Î PartialSumÀº °¢ ±×·ìÀÌ Ã³¸®ÇÑ ¹üÀ§ ³»ÀÇ '½ÇÁ¦ ÇÕ'À» ÀúÀåÇÏ´Â °ÍÀÌ ¸ñÀû.
-        // À§ °è»ê(shMem[tid] + localValue)ÀÌ ´ëºÎºÐÀÇ °æ¿ì ¿Ã¹Ù¸¥ ±×·ì ÃÑÇÕÀÓ.
+        // ë§Œì•½ ê·¸ë£¹ì´ ì²˜ë¦¬í•˜ëŠ” ë§ˆì§€ë§‰ ì¸ë±ìŠ¤ê°€ cellCntë¥¼ ë„˜ì–´ì„œëŠ” ê²½ìš°,
+        // í•´ë‹¹ ê·¸ë£¹ì˜ ì‹¤ì œ ì´ í•©ì€ ë§ˆì§€ë§‰ ìš”ì†Œì˜ exclusive sum + ë§ˆì§€ë§‰ ìš”ì†Œ ê°’ìœ¼ë¡œ ê³„ì‚°ëœ ê°’ê³¼ ë‹¤ë¥¼ ìˆ˜ ìžˆìŒ.
+        // ê·¸ëŸ¬ë‚˜ ì¼ë°˜ì ìœ¼ë¡œ PartialSumì€ ê° ê·¸ë£¹ì´ ì²˜ë¦¬í•œ ë²”ìœ„ ë‚´ì˜ 'ì‹¤ì œ í•©'ì„ ì €ìž¥í•˜ëŠ” ê²ƒì´ ëª©ì .
+        // ìœ„ ê³„ì‚°(shMem[tid] + localValue)ì´ ëŒ€ë¶€ë¶„ì˜ ê²½ìš° ì˜¬ë°”ë¥¸ ê·¸ë£¹ ì´í•©ìž„.
         PartialSum[groupIdx] = totalGroupSum;
     }
 }

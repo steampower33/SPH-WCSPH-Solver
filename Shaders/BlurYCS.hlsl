@@ -1,4 +1,4 @@
-Texture2D<float4> inputTex : register(t0);
+﻿Texture2D<float4> inputTex : register(t0);
 RWTexture2D<float4> outputTex : register(u0);
 
 static const float weights[11] =

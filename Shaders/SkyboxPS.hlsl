@@ -1,4 +1,4 @@
-#include "Common.hlsli"
+﻿#include "Common.hlsli"
 
 TextureCube skyboxTexture[10] : register(t100, space0);
 

@@ -1,4 +1,4 @@
-
+ï»¿
 cbuffer RenderParams : register(b0)
 {
 	float4x4 view;
@@ -18,10 +18,10 @@ cbuffer RenderParams : register(b0)
 
 struct PSInput
 {
-	float4 clipPos  : SV_POSITION;   // ÇÁ·ÎÁ§¼ÇµÈ Äõµå ÄÚ³Ê
-	float2 texCoord : TEXCOORD0;     // Äõµå UV (0~1)
-	float3 viewPos  : TEXCOORD1;     // ºä °ø°£¿¡¼­ÀÇ ÀÔÀÚ Áß½É
-	float  radius : PSIZE1;        // ÀÔÀÚ ¹İÁö¸§
+	float4 clipPos  : SV_POSITION;   // í”„ë¡œì ì…˜ëœ ì¿¼ë“œ ì½”ë„ˆ
+	float2 texCoord : TEXCOORD0;     // ì¿¼ë“œ UV (0~1)
+	float3 viewPos  : TEXCOORD1;     // ë·° ê³µê°„ì—ì„œì˜ ì…ì ì¤‘ì‹¬
+	float  radius : PSIZE1;        // ì…ì ë°˜ì§€ë¦„
 	uint primID : SV_PrimitiveID;
 };
 

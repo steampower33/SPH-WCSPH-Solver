@@ -1,4 +1,4 @@
-# Graphic Engine
+﻿# Graphic Engine
 
 이 프로젝트는 **DirectX 12** 기반의 간단한 그래픽 엔진 예제입니다.  
 라이브러리 의존성 관리를 위해 [vcpkg](https://github.com/microsoft/vcpkg)를 사용하며,  

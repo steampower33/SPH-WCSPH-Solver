@@ -1,4 +1,4 @@
-
+Ôªø
 #define GROUP_SIZE_X 16
 #define GROUP_SIZE_Y 16
 #define MAX_RADIUS 16
@@ -61,7 +61,7 @@ void main(uint3 gid : SV_GroupID,
         {
             int2 pos = tileOrigin + int2(x, y);
 
-            // π¸¿ß π€¿Ã∏È far(1.0)∑Œ √§øÏ±‚
+            // Î≤îÏúÑ Î∞ñÏù¥Î©¥ far(1.0)Î°ú Ï±ÑÏö∞Í∏∞
             if (pos.x < 0 || pos.x >= int(width) ||
                 pos.y < 0 || pos.y >= int(height))
             {

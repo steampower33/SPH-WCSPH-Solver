@@ -1,4 +1,4 @@
-#include "Common.hlsli"
+Ôªø#include "Common.hlsli"
 
 struct GSInput
 {
@@ -17,7 +17,7 @@ void main(point GSInput input[1], inout LineStream<PixelShaderInput> outputStrea
 {
     PixelShaderInput output;
     
-    // Ω√¿€¡°
+    // ÏãúÏûëÏ†ê
     float4 posWorld = mul(input[0].posModel, world);
     float4 normalWorld = mul(input[0].normalModel, worldIT);
     normalWorld = float4(normalize(normalWorld.xyz), 0.0);

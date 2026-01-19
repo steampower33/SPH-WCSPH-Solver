@@ -1,4 +1,4 @@
-struct SamplingPSInput
+ï»¿struct SamplingPSInput
 {
     float4 posModel : SV_POSITION;
     float2 texcoord : TEXCOORD;
@@ -10,9 +10,9 @@ SamplingPSInput main(uint vertexID : SV_VertexID)
     
     float2 positions[3] =
     {
-        float2(-1.0, 3.0), // v0: È­¸é »ó´Ü ¹Ù±ù
-        float2(-1.0, -1.0), // v1: ¿ŞÂÊ ¾Æ·¡
-        float2(3.0, -1.0) // v2: ¿À¸¥ÂÊ ¾Æ·¡
+        float2(-1.0, 3.0), // v0: í™”ë©´ ìƒë‹¨ ë°”ê¹¥
+        float2(-1.0, -1.0), // v1: ì™¼ìª½ ì•„ë˜
+        float2(3.0, -1.0) // v2: ì˜¤ë¥¸ìª½ ì•„ë˜
     };
     
     float2 uvs[3] =

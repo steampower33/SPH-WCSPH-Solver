@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+﻿#include "SphCommon.hlsli"
 
 RWStructuredBuffer<uint> PartialSum : register(u10);
 

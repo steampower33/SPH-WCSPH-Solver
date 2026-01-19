@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+﻿#include "SphCommon.hlsli"
 
 StructuredBuffer<uint> PartialSum : register(t10);
 

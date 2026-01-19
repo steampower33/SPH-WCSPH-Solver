@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+﻿#include "SphCommon.hlsli"
 
 StructuredBuffer<float3> positions : register(t0);
 StructuredBuffer<float3> velocities : register(t2);

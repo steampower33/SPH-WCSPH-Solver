@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <iostream>
 #include <d3d12.h>
@@ -63,7 +63,7 @@ private:
 	XMFLOAT3 m_upDir{ 0.0f, 1.0f, 0.0f };
 	XMFLOAT3 m_rightDir{ 1.0f, 0.0f, 0.0f };
 
-	// ¸¶¿ì½º Ä¿¼­ À§Ä¡ ÀúÀå (Picking¿¡ »ç¿ë)
+	// ë§ˆìš°ìŠ¤ ì»¤ì„œ ìœ„ì¹˜ ì €ì¥ (Pickingì— ì‚¬ìš©)
 	float m_cursorNdcX = 0.0f;
 	float m_cursorNdcY = 0.0f;
 

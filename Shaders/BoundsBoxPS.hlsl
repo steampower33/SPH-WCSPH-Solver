@@ -1,4 +1,4 @@
-struct PSInput
+﻿struct PSInput
 {
 	float4 position : SV_Position;
 };

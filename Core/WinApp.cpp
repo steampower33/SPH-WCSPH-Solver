@@ -1,4 +1,4 @@
-#include "WinApp.h"
+ï»¿#include "WinApp.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -31,10 +31,10 @@ int WinApp::Run(EngineBase* pEngine, HINSTANCE hInstance, int nShowCmd)
 		wc.lpszClassName, 
 		L"LSMEngineWindow",
 		WS_OVERLAPPEDWINDOW,
-		0, // À©µµ¿ì ÁÂÃø »ó´ÜÀÇ x ÁÂÇ¥
-		0, // À©µµ¿ì ÁÂÃø »ó´ÜÀÇ y ÁÂÇ¥
-		windowRect.right - windowRect.left, // À©µµ¿ì °¡·Î ¹æÇâ ÇØ»óµµ
-		windowRect.bottom - windowRect.top, // À©µµ¿ì ¼¼·Î ¹æÇâ ÇØ»óµµ
+		0, // ìœˆë„ìš° ì¢Œì¸¡ ìƒë‹¨ì˜ x ì¢Œí‘œ
+		0, // ìœˆë„ìš° ì¢Œì¸¡ ìƒë‹¨ì˜ y ì¢Œí‘œ
+		windowRect.right - windowRect.left, // ìœˆë„ìš° ê°€ë¡œ ë°©í–¥ í•´ìƒë„
+		windowRect.bottom - windowRect.top, // ìœˆë„ìš° ì„¸ë¡œ ë°©í–¥ í•´ìƒë„
 		NULL, NULL, hInstance, pEngine);
 
 	pEngine->Initialize();
@@ -66,7 +66,7 @@ int WinApp::Run(EngineBase* pEngine, HINSTANCE hInstance, int nShowCmd)
 	return static_cast<int>(msg.wParam);
 }
 
-// À©µµ¿ì ÇÁ·Î½ÃÀú
+// ìœˆë„ìš° í”„ë¡œì‹œì €
 LRESULT CALLBACK WinApp::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	EngineBase* pEngine = reinterpret_cast<EngineBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
@@ -234,7 +234,7 @@ std::wstring WinApp::GetLatestWinPixGpuCapturerPath()
 	if (!foundPixInstallation)
 	{
 		// TODO: Error, no PIX installation found
-		return L""; // ½ÇÆĞ ½Ã ºó ¹®ÀÚ¿­ ¹İÈ¯
+		return L""; // ì‹¤íŒ¨ ì‹œ ë¹ˆ ë¬¸ìì—´ ë°˜í™˜
 	}
 
 	wchar_t output[MAX_PATH];

@@ -1,4 +1,4 @@
-#include "Camera.h"
+ï»¿#include "Camera.h"
 
 using namespace std;
 
@@ -55,12 +55,12 @@ void Camera::LogCameraState()
 }
 
 void Camera::MoveForward(float dt) {
-	// ÀÌµ¿ÈÄÀÇ_À§Ä¡ = ÇöÀç_À§Ä¡ + ÀÌµ¿¹æÇâ * ¼Óµµ * ½Ã°£Â÷ÀÌ;
+	// ì´ë™í›„ì˜_ìœ„ì¹˜ = í˜„ì¬_ìœ„ì¹˜ + ì´ë™ë°©í–¥ * ì†ë„ * ì‹œê°„ì°¨ì´;
 	XMStoreFloat3(&m_pos, XMLoadFloat3(&m_pos) + XMLoadFloat3(&m_lookDir) * m_moveSpeed * dt);
 }
 
 void Camera::MoveUp(float dt) {
-	// ÀÌµ¿ÈÄÀÇ_À§Ä¡ = ÇöÀç_À§Ä¡ + ÀÌµ¿¹æÇâ * ¼Óµµ * ½Ã°£Â÷ÀÌ;
+	// ì´ë™í›„ì˜_ìœ„ì¹˜ = í˜„ì¬_ìœ„ì¹˜ + ì´ë™ë°©í–¥ * ì†ë„ * ì‹œê°„ì°¨ì´;
 	XMStoreFloat3(&m_pos, XMLoadFloat3(&m_pos) + XMLoadFloat3(&m_upDir) * m_moveSpeed * dt);
 }
 
@@ -70,26 +70,26 @@ void Camera::MoveRight(float dt) {
 
 void Camera::UpdateMouse(float deltaX, float deltaY, float dt)
 {
-	// ¸¶¿ì½º ÀÌµ¿·®(Delta)¿¡ ¼Óµµ¿Í deltaTime Àû¿ë
+	// ë§ˆìš°ìŠ¤ ì´ë™ëŸ‰(Delta)ì— ì†ë„ì™€ deltaTime ì ìš©
 	m_yaw += deltaX * m_mouseSensitivity * dt;
 	m_pitch += deltaY * m_mouseSensitivity * dt;
 
-	// Pitch Á¦ÇÑ (Ä«¸Ş¶ó°¡ À§/¾Æ·¡·Î 90µµ ÀÌ»ó È¸ÀüÇÏÁö ¾Êµµ·Ï)
+	// Pitch ì œí•œ (ì¹´ë©”ë¼ê°€ ìœ„/ì•„ë˜ë¡œ 90ë„ ì´ìƒ íšŒì „í•˜ì§€ ì•Šë„ë¡)
 	m_pitch = std::clamp(m_pitch, -DirectX::XM_PIDIV2, DirectX::XM_PIDIV2);
 
-	// »õ·Î¿î ¹æÇâ º¤ÅÍ °è»ê
-	XMVECTOR forward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); // Ä«¸Ş¶óÀÇ ±âº» Àü¹æ ¹æÇâ
-	XMMATRIX yawMatrix = XMMatrixRotationY(m_yaw);          // Yaw È¸Àü Çà·Ä
-	XMMATRIX pitchMatrix = XMMatrixRotationX(m_pitch);      // Pitch È¸Àü Çà·Ä
+	// ìƒˆë¡œìš´ ë°©í–¥ ë²¡í„° ê³„ì‚°
+	XMVECTOR forward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); // ì¹´ë©”ë¼ì˜ ê¸°ë³¸ ì „ë°© ë°©í–¥
+	XMMATRIX yawMatrix = XMMatrixRotationY(m_yaw);          // Yaw íšŒì „ í–‰ë ¬
+	XMMATRIX pitchMatrix = XMMatrixRotationX(m_pitch);      // Pitch íšŒì „ í–‰ë ¬
 
 	XMVECTOR lookDir = XMVector3TransformNormal(forward, pitchMatrix * yawMatrix);
-	lookDir = XMVector3Normalize(lookDir); // Á¤±ÔÈ­ Ãß°¡
+	lookDir = XMVector3Normalize(lookDir); // ì •ê·œí™” ì¶”ê°€
 	XMStoreFloat3(&m_lookDir, lookDir);
 
-	// Ä«¸Ş¶óÀÇ ¿À¸¥ÂÊ ¹æÇâµµ ¾÷µ¥ÀÌÆ®
-	XMVECTOR upDir = XMLoadFloat3(&m_upDir); // upDirÀ» ·ÎµåÇÏ¿© Á¤È®È÷ ±³Â÷
+	// ì¹´ë©”ë¼ì˜ ì˜¤ë¥¸ìª½ ë°©í–¥ë„ ì—…ë°ì´íŠ¸
+	XMVECTOR upDir = XMLoadFloat3(&m_upDir); // upDirì„ ë¡œë“œí•˜ì—¬ ì •í™•íˆ êµì°¨
 	XMVECTOR rightDir = XMVector3Cross(upDir, lookDir);
-	rightDir = XMVector3Normalize(rightDir); // Á¤±ÔÈ­ Ãß°¡
+	rightDir = XMVector3Normalize(rightDir); // ì •ê·œí™” ì¶”ê°€
 	XMStoreFloat3(&m_rightDir, rightDir);
 }
 
@@ -101,13 +101,13 @@ XMFLOAT3 Camera::GetEyePos()
 XMMATRIX Camera::GetViewMatrix()
 {
 	//XMVECTOR pos = XMLoadFloat3(&m_pos);
-	//XMVECTOR target = XMVectorAdd(pos, XMLoadFloat3(&m_lookDir)); // Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ÁöÁ¡
-	//XMVECTOR up = XMLoadFloat3(&m_upDir);                      // ¾÷ º¤ÅÍ
+	//XMVECTOR target = XMVectorAdd(pos, XMLoadFloat3(&m_lookDir)); // ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ì§€ì 
+	//XMVECTOR up = XMLoadFloat3(&m_upDir);                      // ì—… ë²¡í„°
 
 	//return XMMatrixLookAtLH(pos, target, up);
-	XMVECTOR P = XMLoadFloat3(&m_pos);       // ¿ùµå °ø°£ Ä«¸Ş¶ó À§Ä¡
-	float    pitch = m_pitch;                // »óÇÏ È¸Àü (¶óµğ¾È)
-	float    yaw = m_yaw;                  // ÁÂ¿ì È¸Àü (¶óµğ¾È)
+	XMVECTOR P = XMLoadFloat3(&m_pos);       // ì›”ë“œ ê³µê°„ ì¹´ë©”ë¼ ìœ„ì¹˜
+	float    pitch = m_pitch;                // ìƒí•˜ íšŒì „ (ë¼ë””ì•ˆ)
+	float    yaw = m_yaw;                  // ì¢Œìš° íšŒì „ (ë¼ë””ì•ˆ)
 
 	XMMATRIX R_x = XMMatrixRotationX(-pitch);
 	XMMATRIX R_y = XMMatrixRotationY(-yaw);

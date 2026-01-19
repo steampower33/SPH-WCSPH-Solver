@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #undef max
 
@@ -150,14 +150,14 @@ static void CreateBuffer(
 	auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
 	auto texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		format, // ÅØ½ºÃ³ Æ÷¸Ë
-		width,                          // È­¸é ³Êºñ
-		height,                         // È­¸é ³ôÀÌ
+		format, // í…ìŠ¤ì²˜ í¬ë§·
+		width,                          // í™”ë©´ ë„ˆë¹„
+		height,                         // í™”ë©´ ë†’ì´
 		1,                              // arraySize
 		1,                              // mipLevels
 		sampleCount,                    // sampleCount
 		0,                              // sampleQuality
-		bufferFlags // RT·Î »ç¿ëÇÒ ¿¹Á¤ÀÌ¸é ÇÃ·¡±× ¼³Á¤
+		bufferFlags // RTë¡œ ì‚¬ìš©í•  ì˜ˆì •ì´ë©´ í”Œë˜ê·¸ ì„¤ì •
 	);
 
 	ThrowIfFailed(device->CreateCommittedResource(
@@ -190,7 +190,7 @@ static void CreateBuffer(
 		srvDesc.Format = format;
 		srvDesc.ViewDimension = srvDimension;
 		srvDesc.Texture2D.MipLevels = buffer->GetDesc().MipLevels;
-		srvDesc.Texture2DMS.UnusedField_NothingToDefine = 0; // ÇÊµå ¾øÀ½
+		srvDesc.Texture2DMS.UnusedField_NothingToDefine = 0; // í•„ë“œ ì—†ìŒ
 
 		device->CreateShaderResourceView(
 			buffer.Get(),
@@ -364,11 +364,11 @@ static void CreateDDSTextureBuffer(
 
 	wstring wideFilename = StringToWString(filepath);
 
-	// ResourceUploadBatch °´Ã¼ »ı¼º
+	// ResourceUploadBatch ê°ì²´ ìƒì„±
 	ResourceUploadBatch resourceUpload(device.Get());
 	resourceUpload.Begin();
 
-	// DDS ÅØ½ºÃ³ ·Îµå
+	// DDS í…ìŠ¤ì²˜ ë¡œë“œ
 	ComPtr<ID3D12Resource> texture;
 	DDS_ALPHA_MODE alphaMode;
 
@@ -383,11 +383,11 @@ static void CreateDDSTextureBuffer(
 		&alphaMode,
 		&isCubeMap));
 
-	// ¾÷·Îµå ¹èÄ¡ Á¾·á ¹× GPU¿¡ Á¦Ãâ
+	// ì—…ë¡œë“œ ë°°ì¹˜ ì¢…ë£Œ ë° GPUì— ì œì¶œ
 	auto uploadFuture = resourceUpload.End(commandQueue.Get());
 	uploadFuture.wait();
 
-	// SRV »ı¼º
+	// SRV ìƒì„±
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = texture->GetDesc().Format;
@@ -413,8 +413,8 @@ static void CreateDDSTextureBuffer(
 
 	std::filesystem::path filePath(filepath);
 
-	std::string filename = filePath.stem().string();  // È®ÀåÀÚ Á¦¿ÜÇÑ ÆÄÀÏ¸í
-	std::string extension = filePath.extension().string();  // È®ÀåÀÚ
+	std::string filename = filePath.stem().string();  // í™•ì¥ì ì œì™¸í•œ íŒŒì¼ëª…
+	std::string extension = filePath.extension().string();  // í™•ì¥ì
 	std::string filenameExtension = filePath.filename().string();
 
 	textureInfos.insert({ filenameExtension, TextureInfo{
@@ -480,14 +480,14 @@ static void CreateEXRTextureBuffer(
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.Format = metaData.format; // ÅØ½ºÃ³ÀÇ Æ÷¸Ë
+	srvDesc.Format = metaData.format; // í…ìŠ¤ì²˜ì˜ í¬ë§·
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
 	device->CreateShaderResourceView(
-		texture.Get(), // ÅØ½ºÃ³ ¸®¼Ò½º
-		&srvDesc, // SRV ¼³¸í
-		cpuHandle // µğ½ºÅ©¸³ÅÍ ÈüÀÇ ÇÚµé
+		texture.Get(), // í…ìŠ¤ì²˜ ë¦¬ì†ŒìŠ¤
+		&srvDesc, // SRV ì„¤ëª…
+		cpuHandle // ë””ìŠ¤í¬ë¦½í„° í™ì˜ í•¸ë“¤
 	);
 
 	if (lowerFilepath.find("albedo") != std::string::npos)
@@ -513,8 +513,8 @@ static void CreateEXRTextureBuffer(
 
 	std::filesystem::path filePath(filepath);
 
-	std::string filename = filePath.stem().string();  // È®ÀåÀÚ Á¦¿ÜÇÑ ÆÄÀÏ¸í
-	std::string extension = filePath.extension().string();  // È®ÀåÀÚ
+	std::string filename = filePath.stem().string();  // í™•ì¥ì ì œì™¸í•œ íŒŒì¼ëª…
+	std::string extension = filePath.extension().string();  // í™•ì¥ì
 	std::string filenameExtension = filePath.filename().string();
 
 	textureInfos.insert({ filenameExtension, TextureInfo{
@@ -546,7 +546,7 @@ static void CreateMipMapTextureBuffer(
 	DirectX::TexMetadata metaData;
 	ThrowIfFailed(DirectX::LoadFromWICFile(wideFilename.c_str(), DirectX::WIC_FLAGS_NONE, &metaData, *image));
 
-	// ÃÖ´ë ¹Ó¸Ê ·¹º§ °è»ê
+	// ìµœëŒ€ ë°‰ë§µ ë ˆë²¨ ê³„ì‚°
 	size_t minLevel = 1;
 	UINT mipLevels = 1 + static_cast<UINT>(
 		std::floor(std::log2(
@@ -554,12 +554,12 @@ static void CreateMipMapTextureBuffer(
 
 	std::unique_ptr<ScratchImage> mipChain = std::make_unique<ScratchImage>();
 	ThrowIfFailed(DirectX::GenerateMipMaps(
-		image->GetImages(),         // ÀÔ·Â ÀÌ¹ÌÁö
-		image->GetImageCount(),     // ÀÌ¹ÌÁö °³¼ö
-		image->GetMetadata(),       // ¸ŞÅ¸µ¥ÀÌÅÍ
-		TEX_FILTER_DEFAULT,         // ÇÊÅÍ¸µ ¹æ½Ä
-		mipLevels,                  // ¹Ó¸Ê ·¹º§ ¼ö
-		*mipChain                   // Ãâ·Â ScratchImage
+		image->GetImages(),         // ì…ë ¥ ì´ë¯¸ì§€
+		image->GetImageCount(),     // ì´ë¯¸ì§€ ê°œìˆ˜
+		image->GetMetadata(),       // ë©”íƒ€ë°ì´í„°
+		TEX_FILTER_DEFAULT,         // í•„í„°ë§ ë°©ì‹
+		mipLevels,                  // ë°‰ë§µ ë ˆë²¨ ìˆ˜
+		*mipChain                   // ì¶œë ¥ ScratchImage
 	));
 
 	ComPtr<ID3D12Resource> texture;
@@ -625,9 +625,9 @@ static void CreateMipMapTextureBuffer(
 	srvDesc.Texture2D.MostDetailedMip = 0;
 
 	device->CreateShaderResourceView(
-		texture.Get(), // ÅØ½ºÃ³ ¸®¼Ò½º
-		&srvDesc, // SRV ¼³¸í
-		cpuHandle // µğ½ºÅ©¸³ÅÍ ÈüÀÇ ÇÚµé
+		texture.Get(), // í…ìŠ¤ì²˜ ë¦¬ì†ŒìŠ¤
+		&srvDesc, // SRV ì„¤ëª…
+		cpuHandle // ë””ìŠ¤í¬ë¦½í„° í™ì˜ í•¸ë“¤
 	);
 
 	if (lowerFilepath.find("albedo") != std::string::npos || lowerFilepath.find("base") != std::string::npos)
@@ -653,8 +653,8 @@ static void CreateMipMapTextureBuffer(
 
 	std::filesystem::path filePath(filepath);
 
-	std::string filename = filePath.stem().string();  // È®ÀåÀÚ Á¦¿ÜÇÑ ÆÄÀÏ¸í
-	std::string extension = filePath.extension().string();  // È®ÀåÀÚ
+	std::string filename = filePath.stem().string();  // í™•ì¥ì ì œì™¸í•œ íŒŒì¼ëª…
+	std::string extension = filePath.extension().string();  // í™•ì¥ì
 	std::string filenameExtension = filePath.filename().string();
 
 	textureInfos.insert({ filenameExtension, TextureInfo{
@@ -668,8 +668,8 @@ static void CreateMipMapTextureBuffer(
 
 static string TransformToLower(string str)
 {
-	std::string newStr(str.size(), '\0'); // strÀÇ Å©±â¸¸Å­ ÃÊ±âÈ­
-	// std::transformÀ» ÀÌ¿ëÇØ ¹®ÀÚ¿­À» ¼Ò¹®ÀÚ·Î º¯È¯
+	std::string newStr(str.size(), '\0'); // strì˜ í¬ê¸°ë§Œí¼ ì´ˆê¸°í™”
+	// std::transformì„ ì´ìš©í•´ ë¬¸ìì—´ì„ ì†Œë¬¸ìë¡œ ë³€í™˜
 	std::transform(str.begin(), str.end(), newStr.begin(), [](unsigned char c) {
 		return std::tolower(c);
 		});
@@ -729,14 +729,14 @@ static void CreateTextureBuffer(
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.Format = metaData.format; // ÅØ½ºÃ³ÀÇ Æ÷¸Ë
+	srvDesc.Format = metaData.format; // í…ìŠ¤ì²˜ì˜ í¬ë§·
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
 	device->CreateShaderResourceView(
-		texture.Get(), // ÅØ½ºÃ³ ¸®¼Ò½º
-		&srvDesc, // SRV ¼³¸í
-		cpuHandle // µğ½ºÅ©¸³ÅÍ ÈüÀÇ ÇÚµé
+		texture.Get(), // í…ìŠ¤ì²˜ ë¦¬ì†ŒìŠ¤
+		&srvDesc, // SRV ì„¤ëª…
+		cpuHandle // ë””ìŠ¤í¬ë¦½í„° í™ì˜ í•¸ë“¤
 	);
 
 	if (lowerFilepath.find("albedo") != std::string::npos)
@@ -762,8 +762,8 @@ static void CreateTextureBuffer(
 
 	std::filesystem::path filePath(filepath);
 
-	std::string filename = filePath.stem().string();  // È®ÀåÀÚ Á¦¿ÜÇÑ ÆÄÀÏ¸í
-	std::string extension = filePath.extension().string();  // È®ÀåÀÚ
+	std::string filename = filePath.stem().string();  // í™•ì¥ì ì œì™¸í•œ íŒŒì¼ëª…
+	std::string extension = filePath.extension().string();  // í™•ì¥ì
 	std::string filenameExtension = filePath.filename().string();
 
 	textureInfos.insert({ filenameExtension, TextureInfo{

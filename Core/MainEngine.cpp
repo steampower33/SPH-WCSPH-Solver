@@ -1,4 +1,4 @@
-#include "MainEngine.h"
+ï»¿#include "MainEngine.h"
 
 MainEngine* MainEngine::s_app = nullptr;
 
@@ -115,7 +115,7 @@ void MainEngine::Initialize()
 	//	//m_models.insert({ m_mirror->m_key, m_mirror });
 
 	//	float degrees = 90.0f;
-	//	float radians = XMConvertToRadians(degrees); // DirectXMath ÇÔ¼ö »ç¿ë
+	//	float radians = XMConvertToRadians(degrees); // DirectXMath í•¨ìˆ˜ ì‚¬ìš©
 	//	XMVECTOR AxisX{ 1.0f, 0.0f, 0.0f, 0.0f };
 	//	XMVECTOR quaternion = XMQuaternionRotationAxis(AxisX, radians);
 
@@ -194,7 +194,7 @@ void MainEngine::Initialize()
 	//	}
 	//}
 
-	//// ÈÄÃ³¸®¿ë È­¸é »ç°¢Çü
+	//// í›„ì²˜ë¦¬ìš© í™”ë©´ ì‚¬ê°í˜•
 	//{
 	//	MeshData meshData = GeometryGenerator::MakeSquare();
 	//	m_screenSquare = make_shared<Model>(
@@ -202,7 +202,7 @@ void MainEngine::Initialize()
 	//		vector{ meshData }, m_cubemapIndexConstsData, m_textureManager, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f));
 	//}
 
-	//// ÈÄÃ³¸®
+	//// í›„ì²˜ë¦¬
 	//for (int i = 0; i < FrameCount; i++)
 	//	m_frameResources[i]->m_postProcess = make_shared<PostProcess>(
 	//		m_device, m_pCurrFR->m_cmdList, m_sceneSize.x, m_sceneSize.y, m_frameResources[i]->m_globalConstsData.fogSRVIndex, m_frameResources[i]->m_globalConstsData.resolvedSRVIndex);
@@ -237,8 +237,8 @@ void MainEngine::UpdateGUI()
 	ImGui::Begin("Main Editor", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
 
 	{
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0)); // ºÎ¸ğ ÆĞ³ÎÀÇ ÆĞµù
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.0f); // ¸ğ¼­¸® µÕ±Û°Ô
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0)); // ë¶€ëª¨ íŒ¨ë„ì˜ íŒ¨ë”©
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.0f); // ëª¨ì„œë¦¬ ë‘¥ê¸€ê²Œ
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.14f, 0.14f, 0.14f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.21f, 0.21f, 0.21f, 1.0f));
@@ -248,18 +248,19 @@ void MainEngine::UpdateGUI()
 
 		ImGui::BeginChild("Scene Control", m_sceneControllerSize, true);
 
-		// ¿ŞÂÊ ÆĞ³ÎÀÇ ³Êºñ ¼³Á¤
+
+		// ì™¼ìª½ íŒ¨ë„ì˜ ë„ˆë¹„ ì„¤ì •
 		float leftPaneWidth = 60.0f;
 		static int buttonIdx = SPH;
-		ImVec2 buttonSize(leftPaneWidth, 30); // ÆĞ³Î ³Êºñ¿Í µ¿ÀÏÇÏ°Ô ¼³Á¤
+		ImVec2 buttonSize(leftPaneWidth, 30); // íŒ¨ë„ ë„ˆë¹„ì™€ ë™ì¼í•˜ê²Œ ì„¤ì •
 
-		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.0f); // ÀÚ½Ä ÆĞ³ÎÀÇ Å×µÎ¸® Å©±â
+		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.0f); // ìì‹ íŒ¨ë„ì˜ í…Œë‘ë¦¬ í¬ê¸°
 
-		//// ¿ŞÂÊ ÆĞ³Î
+		//// ì™¼ìª½ íŒ¨ë„
 		//{
 		//	ImGui::BeginChild("LeftPane", ImVec2(leftPaneWidth, 0), true);
 
-		//	// ¹öÆ° Ãß°¡
+		//	// ë²„íŠ¼ ì¶”ê°€
 		//	if (ImGui::Button("General", buttonSize)) { buttonIdx = GENERAL; }
 		//	if (ImGui::Button("Objects", buttonSize)) { buttonIdx = OBJECTS; }
 		//	if (ImGui::Button("Shapes", buttonSize)) { buttonIdx = SHAPES; }
@@ -273,7 +274,7 @@ void MainEngine::UpdateGUI()
 		//	ImGui::EndChild();
 		//}
 
-		// ¿À¸¥ÂÊ ÄÜÅÙÃ÷ ¿µ¿ª
+		// ì˜¤ë¥¸ìª½ ì½˜í…ì¸  ì˜ì—­
 		{
 			ImGui::SameLine();
 
@@ -845,32 +846,32 @@ void MainEngine::UpdateGUI()
 	//	//ImGui::SetNextWindowSize(m_assetsBrowserSize, ImGuiCond_Always);
 	//	ImGui::BeginChild("Assets Browser", m_assetsBrowserSize, true);
 
-	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0)); // ºÎ¸ğ ÆĞ³ÎÀÇ ÆĞµù
+	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0)); // ë¶€ëª¨ íŒ¨ë„ì˜ íŒ¨ë”©
 
-	//	const int numColumns = 10;  // ÇÑ ÁÙ¿¡ Ç¥½ÃÇÒ ¾ÆÀÌÅÛ °³¼ö
+	//	const int numColumns = 10;  // í•œ ì¤„ì— í‘œì‹œí•  ì•„ì´í…œ ê°œìˆ˜
 	//	int itemIndex = 0;
-	//	ImVec2 itemSize(120, 160); // °³º° ¾ÆÀÌÅÛ Å©±â
-	//	ImVec2 imageSize(100, 100); // ÀÌ¹ÌÁö Å©±â
-	//	float padding = (itemSize.x - imageSize.x) / 2.0f; // ÁÂ¿ì ¿©¹é
+	//	ImVec2 itemSize(120, 160); // ê°œë³„ ì•„ì´í…œ í¬ê¸°
+	//	ImVec2 imageSize(100, 100); // ì´ë¯¸ì§€ í¬ê¸°
+	//	float padding = (itemSize.x - imageSize.x) / 2.0f; // ì¢Œìš° ì—¬ë°±
 
-	//	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.0f); // ¸ğ¼­¸® µÕ±Û°Ô
-	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0)); // ºÎ¸ğ ÆĞ³ÎÀÇ ÆĞµù
-	//	for (const auto& pair : m_textureManager->m_textureInfos) // ÅØ½ºÃ³ ¸®½ºÆ® ¼øÈ¸
+	//	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 1.0f); // ëª¨ì„œë¦¬ ë‘¥ê¸€ê²Œ
+	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0)); // ë¶€ëª¨ íŒ¨ë„ì˜ íŒ¨ë”©
+	//	for (const auto& pair : m_textureManager->m_textureInfos) // í…ìŠ¤ì²˜ ë¦¬ìŠ¤íŠ¸ ìˆœíšŒ
 	//	{
 	//		if (itemIndex % numColumns != 0)
-	//			ImGui::SameLine(); // °°Àº ÁÙ¿¡ ¹èÄ¡
+	//			ImGui::SameLine(); // ê°™ì€ ì¤„ì— ë°°ì¹˜
 
-	//		ImGui::PushID(itemIndex); // °íÀ¯ ID Ãß°¡
+	//		ImGui::PushID(itemIndex); // ê³ ìœ  ID ì¶”ê°€
 
-	//		// °³º° ¾ÆÀÌÅÛ ¹Ú½º
+	//		// ê°œë³„ ì•„ì´í…œ ë°•ìŠ¤
 	//		ImGui::BeginChild("MaterialItem", ImVec2(120, 160), true, ImGuiWindowFlags_NoScrollbar);
 
-	//		// ÀÌ¹ÌÁö Á¤·Ä (»ó/ÇÏ/ÁÂ/¿ì ¿©¹é ÅëÀÏ)
-	//		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding); // ÁÂ¿ì ¿©¹é ¸ÂÃß±â
-	//		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10); // À§ÂÊ ¿©¹é
+	//		// ì´ë¯¸ì§€ ì •ë ¬ (ìƒ/í•˜/ì¢Œ/ìš° ì—¬ë°± í†µì¼)
+	//		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding); // ì¢Œìš° ì—¬ë°± ë§ì¶”ê¸°
+	//		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10); // ìœ„ìª½ ì—¬ë°±
 	//		ImGui::Image((ImTextureID)pair.second.gpuHandle.ptr, imageSize);
 
-	//		// ÀÌ¹ÌÁö Å¬¸¯ °¨Áö
+	//		// ì´ë¯¸ì§€ í´ë¦­ ê°ì§€
 	//		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 	//		{
 	//			dragState.isDragging = true;
@@ -882,16 +883,16 @@ void MainEngine::UpdateGUI()
 	//			dragState.albedoTextureIndex = pair.second.heapIndex;
 	//		}
 
-	//		// ±¸ºĞ¼± Á¤·Ä
+	//		// êµ¬ë¶„ì„  ì •ë ¬
 	//		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5);
 	//		ImGui::Separator();
 
-	//		// ÅØ½ºÆ® Á¤·Ä
-	//		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding); // ÅØ½ºÆ® ÁÂ¿ì Áß¾Ó Á¤·Ä
+	//		// í…ìŠ¤íŠ¸ ì •ë ¬
+	//		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding); // í…ìŠ¤íŠ¸ ì¢Œìš° ì¤‘ì•™ ì •ë ¬
 	//		ImGui::TextWrapped(pair.second.filename.c_str());
 
 	//		ImGui::EndChild();
-	//		ImGui::PopID(); // ID Á¦°Å
+	//		ImGui::PopID(); // ID ì œê±°
 
 	//		itemIndex++;
 	//	}
@@ -899,16 +900,16 @@ void MainEngine::UpdateGUI()
 
 	//	ImGui::EndChild();
 
-	//	// µå·¡±× ÁßÀÌ¸é ¹İÅõ¸íÇÑ ¹Ì¸®º¸±â Ç¥½Ã
+	//	// ë“œë˜ê·¸ ì¤‘ì´ë©´ ë°˜íˆ¬ëª…í•œ ë¯¸ë¦¬ë³´ê¸° í‘œì‹œ
 	//	if (dragState.isDragging)
 	//	{
 	//		ImVec2 mousePos = ImGui::GetMousePos();
 	//		ImVec2 drawPos = ImVec2(mousePos.x - dragState.dragOffset.x, mousePos.y - dragState.dragOffset.y);
 
-	//		// µå·¡±× ÀÌ¹ÌÁö¸¦ Ç×»ó ÃÖ»óÀ§¿¡ ·»´õ¸µ
+	//		// ë“œë˜ê·¸ ì´ë¯¸ì§€ë¥¼ í•­ìƒ ìµœìƒìœ„ì— ë Œë”ë§
 	//		ImGui::SetNextWindowFocus();
 	//		ImGui::SetNextWindowPos(drawPos, ImGuiCond_Always);
-	//		ImGui::SetNextWindowBgAlpha(0.5f); // ¹İÅõ¸í È¿°ú
+	//		ImGui::SetNextWindowBgAlpha(0.5f); // ë°˜íˆ¬ëª… íš¨ê³¼
 	//		ImGui::Begin("DragPreview", nullptr,
 	//			ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
 	//			ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
@@ -919,7 +920,7 @@ void MainEngine::UpdateGUI()
 
 	//		ImGui::End();
 
-	//		// ¸¶¿ì½º ³õÀ¸¸é µå·¡±× Á¾·á
+	//		// ë§ˆìš°ìŠ¤ ë†“ìœ¼ë©´ ë“œë˜ê·¸ ì¢…ë£Œ
 	//		if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 	//		{
 	//			dragState.isReleased = true;
@@ -1121,11 +1122,11 @@ void MainEngine::SphRenderPass()
 	//	D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE	, D3D12_RESOURCE_STATE_RESOLVE_DEST);
 
 	//m_pCurrFR->m_cmdList->ResolveSubresource(
-	//	m_pCurrFR->m_sceneRTVBuffer.Get(),   // Resolve ´ë»ó (´ÜÀÏ »ùÇÃ ÅØ½ºÃ³)
-	//	0,                      // ´ë»ó ¼­ºê¸®¼Ò½º ÀÎµ¦½º
-	//	m_pCurrFR->m_floatBuffers.Get(),       // Resolve ¼Ò½º (MSAA ÅØ½ºÃ³)
-	//	0,                      // ¼Ò½º ¼­ºê¸®¼Ò½º ÀÎµ¦½º
-	//	m_pCurrFR->m_floatBuffers->GetDesc().Format // Resolve Æ÷¸Ë
+	//	m_pCurrFR->m_sceneRTVBuffer.Get(),   // Resolve ëŒ€ìƒ (ë‹¨ì¼ ìƒ˜í”Œ í…ìŠ¤ì²˜)
+	//	0,                      // ëŒ€ìƒ ì„œë¸Œë¦¬ì†ŒìŠ¤ ì¸ë±ìŠ¤
+	//	m_pCurrFR->m_floatBuffers.Get(),       // Resolve ì†ŒìŠ¤ (MSAA í…ìŠ¤ì²˜)
+	//	0,                      // ì†ŒìŠ¤ ì„œë¸Œë¦¬ì†ŒìŠ¤ ì¸ë±ìŠ¤
+	//	m_pCurrFR->m_floatBuffers->GetDesc().Format // Resolve í¬ë§·
 	//);
 
 	//SetBarrier(m_pCurrFR->m_cmdList, m_pCurrFR->m_sceneRTVBuffer,
@@ -1145,7 +1146,7 @@ void MainEngine::UpdateLight(float dt)
 		axis = XMVector3TransformCoord(axis, rotMat);
 	}
 
-	// 1¹ø LIGHT¸¸ ¼³Á¤
+	// 1ë²ˆ LIGHTë§Œ ì„¤ì •
 	XMVECTOR focusPosition = XMVECTOR{ 0.0f, 0.0f, 0.0f };
 	XMVECTOR posVec = XMVectorAdd(XMVECTOR{ 0.0f, 2.0f, 0.0f }, axis);
 	XMStoreFloat3(&m_globalConstsData.light[1].position, posVec);
@@ -1165,7 +1166,7 @@ void MainEngine::UpdateLight(float dt)
 			if (abs(XMVectorGetX(XMVector3Dot(up, lightDir)) + 1.0f) < 1e-5)
 				up = XMVECTOR{ 1.0f, 0.0f, 0.0f };
 
-			// ±×¸²ÀÚ¸ÊÀ» ¸¸µé ¶§ ÇÊ¿ä
+			// ê·¸ë¦¼ìë§µì„ ë§Œë“¤ ë•Œ í•„ìš”
 			XMMATRIX lightView = XMMatrixLookAtLH(
 				lightPos, XMVectorAdd(lightPos, lightDir), up);
 
@@ -1184,8 +1185,8 @@ void MainEngine::UpdateLight(float dt)
 			XMMATRIX lightInvProj;
 			lightInvProj = XMMatrixInverse(&det, lightProj);
 			if (XMVectorGetX(det) == 0.0f) {
-				// ¿ªÇà·ÄÀÌ Á¸ÀçÇÏÁö ¾ÊÀ½
-				assert(false && "¿ªÇà·ÄÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù!");
+				// ì—­í–‰ë ¬ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŒ
+				assert(false && "ì—­í–‰ë ¬ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!");
 			}
 			XMMATRIX lightInvProjTrans = XMMatrixTranspose(lightInvProj);
 			XMStoreFloat4x4(&m_shadowGlobalConstsData[i].invProj, lightInvProjTrans);
@@ -1207,23 +1208,23 @@ void MainEngine::UpdateMouseControl()
 
 	if (m_leftButton || m_rightButton || dragState.isReleased)
 	{
-		// NDC ÁÂÇ¥¸¦ Å¬¸³ °ø°£ÀÇ ÁÂÇ¥·Î º¯È¯ (Z = 0.0f´Â Near Plane, Z = 1.0f´Â Far Plane)
+		// NDC ì¢Œí‘œë¥¼ í´ë¦½ ê³µê°„ì˜ ì¢Œí‘œë¡œ ë³€í™˜ (Z = 0.0fëŠ” Near Plane, Z = 1.0fëŠ” Far Plane)
 		XMVECTOR rayNDCNear = XMVectorSet(m_ndcX, m_ndcY, 0.0f, 1.0f);
 		XMVECTOR rayNDCFar = XMVectorSet(m_ndcX, m_ndcY, 1.0f, 1.0f);
 
-		// ¿ª ÇÁ·ÎÁ§¼Ç ¸ÅÆ®¸¯½º¸¦ »ç¿ëÇÏ¿© ¿ùµå °ø°£ÀÇ ÁÂÇ¥·Î º¯È¯
+		// ì—­ í”„ë¡œì ì…˜ ë§¤íŠ¸ë¦­ìŠ¤ë¥¼ ì‚¬ìš©í•˜ì—¬ ì›”ë“œ ê³µê°„ì˜ ì¢Œí‘œë¡œ ë³€í™˜
 		XMMATRIX invProjection = XMMatrixInverse(nullptr, proj);
 		XMMATRIX invView = XMMatrixInverse(nullptr, view);
 
-		// Å¬¸³ °ø°£À» º¸±â °ø°£À¸·Î º¯È¯
+		// í´ë¦½ ê³µê°„ì„ ë³´ê¸° ê³µê°„ìœ¼ë¡œ ë³€í™˜
 		XMVECTOR rayViewNear = XMVector3TransformCoord(rayNDCNear, invProjection);
 		XMVECTOR rayViewFar = XMVector3TransformCoord(rayNDCFar, invProjection);
 
-		// º¸±â °ø°£À» ¿ùµå °ø°£À¸·Î º¯È¯
+		// ë³´ê¸° ê³µê°„ì„ ì›”ë“œ ê³µê°„ìœ¼ë¡œ ë³€í™˜
 		XMVECTOR rayWorldNear = XMVector3TransformCoord(rayViewNear, invView);
 		XMVECTOR rayWorldFar = XMVector3TransformCoord(rayViewFar, invView);
 
-		// ±¤¼±ÀÇ ¿øÁ¡°ú ¹æÇâ °è»ê
+		// ê´‘ì„ ì˜ ì›ì ê³¼ ë°©í–¥ ê³„ì‚°
 		XMFLOAT3 originFloat;
 		XMStoreFloat3(&originFloat, rayWorldNear);
 		XMFLOAT3 farPointFloat;
@@ -1235,7 +1236,7 @@ void MainEngine::UpdateMouseControl()
 			farPointFloat.z - originFloat.z
 		};
 
-		// ¹æÇâ º¤ÅÍ Á¤±ÔÈ­
+		// ë°©í–¥ ë²¡í„° ì •ê·œí™”
 		XMVECTOR directionVec = XMVector3Normalize(XMLoadFloat3(&direction));
 
 		Ray ray(originFloat, directionVec);
@@ -1266,7 +1267,7 @@ void MainEngine::UpdateMouseControl()
 			}
 			//cout << dist << endl;
 
-			// Ãæµ¹ ÁöÁ¡¿¡ ÀÛÀº ±¸ ±×¸®±â
+			// ì¶©ëŒ ì§€ì ì— ì‘ì€ êµ¬ ê·¸ë¦¬ê¸°
 			XMVECTOR pickVec = XMVectorAdd(rayWorldNear, XMVectorScale(directionVec, dist));
 			XMMATRIX worldMat = XMMatrixTranslationFromVector(pickVec);
 			XMMATRIX invTranspose = worldMat;
@@ -1276,7 +1277,7 @@ void MainEngine::UpdateMouseControl()
 			XMStoreFloat4x4(&m_cursorSphere->m_meshConstsBufferData.worldIT, invTranspose);
 			m_cursorSphere->OnlyCallConstsMemcpy();
 
-			// µå·¡±×
+			// ë“œë˜ê·¸
 			XMVECTOR centerVec = XMLoadFloat3(&selectedModel->m_boundingSphere->Center);
 
 			if (m_leftButton)
@@ -1290,39 +1291,39 @@ void MainEngine::UpdateMouseControl()
 				}
 				else
 				{
-					// ÇöÀç º¤ÅÍ °è»ê ¹× Á¤±ÔÈ­
+					// í˜„ì¬ ë²¡í„° ê³„ì‚° ë° ì •ê·œí™”
 					XMVECTOR currentVector = XMVectorSubtract(pickVec, centerVec);
 					currentVector = XMVector3Normalize(currentVector);
 
-					// º¤ÅÍ Â÷ÀÌ °è»ê
+					// ë²¡í„° ì°¨ì´ ê³„ì‚°
 					XMVECTOR delta = XMVectorSubtract(currentVector, prevVector);
 					float deltaLength = XMVectorGetX(XMVector3Length(delta));
 
-					// ¸¶¿ì½º°¡ Á¶±İÀÌ¶óµµ ¿òÁ÷¿´À» °æ¿ì¿¡¸¸ È¸Àü½ÃÅ°±â
+					// ë§ˆìš°ìŠ¤ê°€ ì¡°ê¸ˆì´ë¼ë„ ì›€ì§ì˜€ì„ ê²½ìš°ì—ë§Œ íšŒì „ì‹œí‚¤ê¸°
 					if (deltaLength > 1e-3f) {
-						// Ãà°ú °¢µµ °è»ê
+						// ì¶•ê³¼ ê°ë„ ê³„ì‚°
 						XMVECTOR cross = XMVector3Cross(prevVector, currentVector);
 						XMVECTOR dot = XMVector3Dot(prevVector, currentVector);
 						float dotValue = XMVectorGetX(dot);
-						float angle = acosf(dotValue); // °¢µµ (¶óµğ¾È)
+						float angle = acosf(dotValue); // ê°ë„ (ë¼ë””ì•ˆ)
 
-						// º¤ÅÍ°¡ ¹İ´ë ¹æÇâÀÎ °æ¿ì¸¦ Ã³¸®
+						// ë²¡í„°ê°€ ë°˜ëŒ€ ë°©í–¥ì¸ ê²½ìš°ë¥¼ ì²˜ë¦¬
 						if (fabsf(dotValue + 1.0f) < 1e-3f) {
-							// º¤ÅÍ°¡ ¹İ´ë ¹æÇâÀÎ °æ¿ì, ÀÓÀÇÀÇ Á÷±³ Ãà ¼±ÅÃ
+							// ë²¡í„°ê°€ ë°˜ëŒ€ ë°©í–¥ì¸ ê²½ìš°, ì„ì˜ì˜ ì§êµ ì¶• ì„ íƒ
 							XMVECTOR arbitrary = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 							cross = XMVector3Cross(prevVector, arbitrary);
 							cross = XMVector3Normalize(cross);
 							angle = XM_PI;
 						}
 						else {
-							// Ãà Á¤±ÔÈ­
+							// ì¶• ì •ê·œí™”
 							cross = XMVector3Normalize(cross);
 						}
 
-						// ÄõÅÍ´Ï¾ğ »ı¼º
+						// ì¿¼í„°ë‹ˆì–¸ ìƒì„±
 						q = XMQuaternionRotationAxis(cross, angle);
 
-						// ÀÌÀü º¤ÅÍ ¾÷µ¥ÀÌÆ®
+						// ì´ì „ ë²¡í„° ì—…ë°ì´íŠ¸
 						prevVector = currentVector;
 					}
 				}
@@ -1382,7 +1383,7 @@ void MainEngine::Destroy()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	// COM ÇØÁ¦
+	// COM í•´ì œ
 	CoUninitialize();
 }
 
@@ -1535,7 +1536,7 @@ void MainEngine::DepthOnlyPass()
 
 void MainEngine::ScenePass()
 {
-	// FogDepthOnly¿¡¼­ÀÇ viewport ±×´ë·Î »ç¿ë
+	// FogDepthOnlyì—ì„œì˜ viewport ê·¸ëŒ€ë¡œ ì‚¬ìš©
 	{
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_pCurrFR->m_floatRTVHeap->GetCPUDescriptorHandleForHeapStart());
 		CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_pCurrFR->m_floatDSVHeap->GetCPUDescriptorHandleForHeapStart());
@@ -1584,14 +1585,14 @@ void MainEngine::ScenePass()
 		if (m_guiState.isMirrorEnabled)
 		{
 			m_pCurrFR->m_cmdList->SetPipelineState(Graphics::stencilMaskPSO.Get());
-			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ÂüÁ¶ °ª 1·Î ¼³Á¤
+			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ì°¸ì¡° ê°’ 1ë¡œ ì„¤ì •
 			m_mirror->Render(m_device, m_pCurrFR->m_cmdList);
 
 			if (m_guiState.isWireframe)
 				m_pCurrFR->m_cmdList->SetPipelineState(Graphics::reflectWirePSO.Get());
 			else
 				m_pCurrFR->m_cmdList->SetPipelineState(Graphics::reflectSolidPSO.Get());
-			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ÂüÁ¶ °ª 1·Î ¼³Á¤
+			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ì°¸ì¡° ê°’ 1ë¡œ ì„¤ì •
 			m_pCurrFR->m_cmdList->SetGraphicsRootConstantBufferView(0, m_pCurrFR->m_reflectConstsUploadHeap.Get()->GetGPUVirtualAddress());
 			m_pCurrFR->m_cmdList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 			for (const auto& model : m_models)
@@ -1601,13 +1602,13 @@ void MainEngine::ScenePass()
 				m_pCurrFR->m_cmdList->SetPipelineState(Graphics::skyboxReflectWirePSO.Get());
 			else
 				m_pCurrFR->m_cmdList->SetPipelineState(Graphics::skyboxReflectSolidPSO.Get());
-			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ÂüÁ¶ °ª 1·Î ¼³Á¤
+			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ì°¸ì¡° ê°’ 1ë¡œ ì„¤ì •
 			m_skybox->RenderSkybox(m_device, m_pCurrFR->m_cmdList);
 
 			m_pCurrFR->m_cmdList->SetPipelineState(Graphics::mirrorBlendSolidPSO.Get());
 			m_pCurrFR->m_cmdList->SetGraphicsRootConstantBufferView(0, m_pCurrFR->m_globalConstsUploadHeap.Get()->GetGPUVirtualAddress());
 			m_pCurrFR->m_cmdList->OMSetBlendFactor(m_blendFactor);
-			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ÂüÁ¶ °ª 1·Î ¼³Á¤
+			m_pCurrFR->m_cmdList->OMSetStencilRef(1); // ì°¸ì¡° ê°’ 1ë¡œ ì„¤ì •
 			m_mirror->Render(m_device, m_pCurrFR->m_cmdList);
 		}
 	}
@@ -1624,18 +1625,18 @@ void MainEngine::ResolvePass()
 	SetBarrier(m_pCurrFR->m_cmdList, m_pCurrFR->m_floatBuffers,
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_RESOLVE_SOURCE);
 
-	// PostEffects, PostProcess µÑ´Ù False
+	// PostEffects, PostProcess ë‘˜ë‹¤ False
 	if (!m_guiState.isPostEffectsEnabled && !m_guiState.isPostProcessEnabled)
 	{
 		SetBarrier(m_pCurrFR->m_cmdList, m_pCurrFR->m_sceneRTVBuffer,
 			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RESOLVE_DEST);
 
 		m_pCurrFR->m_cmdList->ResolveSubresource(
-			m_pCurrFR->m_sceneRTVBuffer.Get(),   // Resolve ´ë»ó (´ÜÀÏ »ùÇÃ ÅØ½ºÃ³)
-			0,                      // ´ë»ó ¼­ºê¸®¼Ò½º ÀÎµ¦½º
-			m_pCurrFR->m_floatBuffers.Get(),       // Resolve ¼Ò½º (MSAA ÅØ½ºÃ³)
-			0,                      // ¼Ò½º ¼­ºê¸®¼Ò½º ÀÎµ¦½º
-			m_pCurrFR->m_floatBuffers->GetDesc().Format // Resolve Æ÷¸Ë
+			m_pCurrFR->m_sceneRTVBuffer.Get(),   // Resolve ëŒ€ìƒ (ë‹¨ì¼ ìƒ˜í”Œ í…ìŠ¤ì²˜)
+			0,                      // ëŒ€ìƒ ì„œë¸Œë¦¬ì†ŒìŠ¤ ì¸ë±ìŠ¤
+			m_pCurrFR->m_floatBuffers.Get(),       // Resolve ì†ŒìŠ¤ (MSAA í…ìŠ¤ì²˜)
+			0,                      // ì†ŒìŠ¤ ì„œë¸Œë¦¬ì†ŒìŠ¤ ì¸ë±ìŠ¤
+			m_pCurrFR->m_floatBuffers->GetDesc().Format // Resolve í¬ë§·
 		);
 
 		SetBarrier(m_pCurrFR->m_cmdList, m_pCurrFR->m_sceneRTVBuffer,
@@ -1644,11 +1645,11 @@ void MainEngine::ResolvePass()
 	else
 	{
 		m_pCurrFR->m_cmdList->ResolveSubresource(
-			m_pCurrFR->m_resolvedBuffers.Get(),   // Resolve ´ë»ó (´ÜÀÏ »ùÇÃ ÅØ½ºÃ³)
-			0,                      // ´ë»ó ¼­ºê¸®¼Ò½º ÀÎµ¦½º
-			m_pCurrFR->m_floatBuffers.Get(),       // Resolve ¼Ò½º (MSAA ÅØ½ºÃ³)
-			0,                      // ¼Ò½º ¼­ºê¸®¼Ò½º ÀÎµ¦½º
-			m_pCurrFR->m_floatBuffers->GetDesc().Format // Resolve Æ÷¸Ë
+			m_pCurrFR->m_resolvedBuffers.Get(),   // Resolve ëŒ€ìƒ (ë‹¨ì¼ ìƒ˜í”Œ í…ìŠ¤ì²˜)
+			0,                      // ëŒ€ìƒ ì„œë¸Œë¦¬ì†ŒìŠ¤ ì¸ë±ìŠ¤
+			m_pCurrFR->m_floatBuffers.Get(),       // Resolve ì†ŒìŠ¤ (MSAA í…ìŠ¤ì²˜)
+			0,                      // ì†ŒìŠ¤ ì„œë¸Œë¦¬ì†ŒìŠ¤ ì¸ë±ìŠ¤
+			m_pCurrFR->m_floatBuffers->GetDesc().Format // Resolve í¬ë§·
 		);
 	}
 

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <iostream>
 
@@ -31,9 +31,9 @@ public:
 
 	struct ParticleHash
 	{
-		UINT particleID = 0; // ¿ø·¡ ÆÄÆ¼Å¬ ÀÎµ¦½º
-		int cellIndex = 0;  // °è»êµÈ ÇØ½Ã °ª
-		UINT flag = 0; // ±×·ì ½ÃÀÛ ÇÃ·¡±×
+		UINT particleID = 0; // ì›ë˜ íŒŒí‹°í´ ì¸ë±ìŠ¤
+		int cellIndex = 0;  // ê³„ì‚°ëœ í•´ì‹œ ê°’
+		UINT flag = 0; // ê·¸ë£¹ ì‹œì‘ í”Œë˜ê·¸
 		float pad;
 	};
 
@@ -239,8 +239,8 @@ public:
 	bool m_smoothingDepthRender = false;
 	bool m_normalRender = false;
 	bool m_thicknessRender = false;
-	bool m_shadedRender = false;
-	bool m_sceneRender = true;
+	bool m_shadedRender = true;
+	bool m_sceneRender = false;
 
 	ComPtr<ID3D12Resource> diffuseBuffer;
 	ComPtr<ID3D12Resource> specularBuffer;

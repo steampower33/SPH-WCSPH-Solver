@@ -1,14 +1,14 @@
-#include "Common.hlsli"
+ï»¿#include "Common.hlsli"
 
 Texture2D texture[100] : register(t0, space0);
 TextureCube skyboxTexture[10] : register(t100, space0);
 
 static const uint textureSizeOffset = 100;
-static const float3 Fdielectric = 0.04; // ºñ±İ¼Ó(Dielectric) ÀçÁúÀÇ F0
+static const float3 Fdielectric = 0.04; // ë¹„ê¸ˆì†(Dielectric) ì¬ì§ˆì˜ F0
 
 #define NEAR_PLANE 0.1
 // #define LIGHT_WORLD_RADIUS 0.001
-#define LIGHT_FRUSTUM_WIDTH 0.34641 // <- °è»êÇØ¼­ Ã£Àº °ª
+#define LIGHT_FRUSTUM_WIDTH 0.34641 // <- ê³„ì‚°í•´ì„œ ì°¾ì€ ê°’
 
 float3 SchlickFresnel(float3 F0, float NdotH)
 {
@@ -19,19 +19,19 @@ float3 GetNormal(PSInput input)
 {
     float3 normalWorld = input.normalWorld;
     
-    if (useNormalMap && normalIndex != 0) // NormalWorld¸¦ ±³Ã¼
+    if (useNormalMap && normalIndex != 0) // NormalWorldë¥¼ êµì²´
     {
         float3 normal = texture[normalIndex].SampleLevel(linearWrapSampler, input.texcoord, meshLodBias).rgb;
-        normal = 2.0 * normal - 1.0; // ¹üÀ§ Á¶Àı [-1.0, 1.0]
+        normal = 2.0 * normal - 1.0; // ë²”ìœ„ ì¡°ì ˆ [-1.0, 1.0]
 
-        // OpenGL ¿ë ³ë¸Ö¸ÊÀÏ °æ¿ì¿¡´Â y ¹æÇâÀ» µÚÁı¾îÁİ´Ï´Ù.
+        // OpenGL ìš© ë…¸ë©€ë§µì¼ ê²½ìš°ì—ëŠ” y ë°©í–¥ì„ ë’¤ì§‘ì–´ì¤ë‹ˆë‹¤.
         normal.y = invertNormalMapY ? -normal.y : normal.y;
         
         float3 N = normalWorld;
         float3 T = normalize(input.tangentWorld - dot(input.tangentWorld, N) * N);
         float3 B = cross(N, T);
         
-        // matrix´Â float4x4, ¿©±â¼­´Â º¤ÅÍ º¯È¯¿ëÀÌ¶ó¼­ 3x3 »ç¿ë
+        // matrixëŠ” float4x4, ì—¬ê¸°ì„œëŠ” ë²¡í„° ë³€í™˜ìš©ì´ë¼ì„œ 3x3 ì‚¬ìš©
         float3x3 TBN = float3x3(T, B, N);
         normalWorld = normalize(mul(normal, TBN));
     }
@@ -46,7 +46,7 @@ float3 DiffuseIBL(float3 albedo, float3 normalWorld, float3 pixelToEye,
     float3 F = SchlickFresnel(F0, max(0.0, dot(normalWorld, pixelToEye)));
     float3 kd = lerp(1.0 - F, 0.0, metallic);
     
-    // ¾Õ¿¡¼­ »ç¿ëÇß´ø ¹æ¹ı°ú µ¿ÀÏ
+    // ì•ì—ì„œ ì‚¬ìš©í–ˆë˜ ë°©ë²•ê³¼ ë™ì¼
     float3 irradiance = isEnvEnabled ? skyboxTexture[cubemapDiffuseIndex - textureSizeOffset].SampleLevel(linearWrapSampler, normalWorld, 0.0).rgb : float3(0.0, 0.0, 0.0);
     
     return kd * albedo * irradiance;
@@ -59,8 +59,8 @@ float3 SpecularIBL(float3 albedo, float3 normalWorld, float3 pixelToEye,
     float3 specularIrradiance = isEnvEnabled ? skyboxTexture[cubemapSpecularIndex - textureSizeOffset].
         SampleLevel(linearWrapSampler, reflect(-pixelToEye, normalWorld), 2 + roughness * 5.0f).rgb : float3(0.0, 0.0, 0.0);
     
-    // ¾Õ¿¡¼­ »ç¿ëÇß´ø ¹æ¹ı°ú µ¿ÀÏ
-    const float3 Fdielectric = 0.04; // ºñ±İ¼Ó(Dielectric) ÀçÁúÀÇ F0
+    // ì•ì—ì„œ ì‚¬ìš©í–ˆë˜ ë°©ë²•ê³¼ ë™ì¼
+    const float3 Fdielectric = 0.04; // ë¹„ê¸ˆì†(Dielectric) ì¬ì§ˆì˜ F0
     float3 F0 = lerp(Fdielectric, albedo, metallic);
 
     return (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
@@ -198,16 +198,16 @@ float3 LightRadiance(in Light light, in float3 posWorld, in float3 normalWorld, 
     float shadowFactor = 1.0;
     if (light.type & LIGHT_SHADOW)
     {
-        const float nearZ = 0.01; // Ä«¸Ş¶ó ¼³Á¤°ú µ¿ÀÏ
+        const float nearZ = 0.01; // ì¹´ë©”ë¼ ì„¤ì •ê³¼ ë™ì¼
         
         // 1. Project posWorld to light screen
-        // light.viewProj »ç¿ë
+        // light.viewProj ì‚¬ìš©
         float4 lightScreen = mul(float4(posWorld, 1.0), light.viewProj);
         lightScreen.xyz /= lightScreen.w;
         
-        // 2. Ä«¸Ş¶ó(±¤¿ø)¿¡¼­ º¼ ¶§ÀÇ ÅØ½ºÃç ÁÂÇ¥ °è»ê
+        // 2. ì¹´ë©”ë¼(ê´‘ì›)ì—ì„œ ë³¼ ë•Œì˜ í…ìŠ¤ì¶° ì¢Œí‘œ ê³„ì‚°
         // [-1, 1]x[-1, 1] -> [0, 1]x[0, 1]
-        // ÁÖÀÇ: ÅØ½ºÃç ÁÂÇ¥¿Í NDC´Â y°¡ ¹İ´ë
+        // ì£¼ì˜: í…ìŠ¤ì¶° ì¢Œí‘œì™€ NDCëŠ” yê°€ ë°˜ëŒ€
         float2 lightTexcoord = float2(lightScreen.x, -lightScreen.y);
         lightTexcoord += 1.0;
         lightTexcoord *= 0.5;
@@ -272,7 +272,7 @@ float4 main(PSInput input) : SV_TARGET
                                                   metallic, roughness) * strengthIBL;
     
     float3 directLighting = float3(0, 0, 0);
-    // Æ÷ÀÎÆ® ¶óÀÌÆ®¸¸ ¸ÕÀú ±¸Çö
+    // í¬ì¸íŠ¸ ë¼ì´íŠ¸ë§Œ ë¨¼ì € êµ¬í˜„
     [unroll]
     for (int i = 0; i < MAX_LIGHTS; ++i)
     {
@@ -287,7 +287,7 @@ float4 main(PSInput input) : SV_TARGET
             float NdotH = max(0.0, dot(normalWorld, halfway));
             float NdotO = max(0.0, dot(normalWorld, pixelToEye));
         
-            const float3 Fdielectric = 0.04; // ºñ±İ¼Ó(Dielectric) ÀçÁúÀÇ F0
+            const float3 Fdielectric = 0.04; // ë¹„ê¸ˆì†(Dielectric) ì¬ì§ˆì˜ F0
             float3 F0 = lerp(Fdielectric, albedo, metallic);
             float3 F = SchlickFresnel(F0, max(0.0, dot(halfway, pixelToEye)));
             float3 kd = lerp(float3(1, 1, 1) - F, float3(0, 0, 0), metallic);

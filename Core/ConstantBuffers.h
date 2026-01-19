@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <d3d12.h>
 #include "d3dx12.h"
@@ -13,11 +13,11 @@ using namespace DirectX;
 #define LIGHT_SPOT 0x04
 #define LIGHT_SHADOW 0x10
 
-// Á¶¸í
+// ì¡°ëª…
 __declspec(align(256)) struct Light
 {
-	XMFLOAT4X4 viewProj; // ±×¸²ÀÚ ·»´õ¸µ¿¡ ÇÊ¿ä
-	XMFLOAT4X4 invProj; // ±×¸²ÀÚ ·»´õ¸µ µğ¹ö±ë¿ë
+	XMFLOAT4X4 viewProj; // ê·¸ë¦¼ì ë Œë”ë§ì— í•„ìš”
+	XMFLOAT4X4 invProj; // ê·¸ë¦¼ì ë Œë”ë§ ë””ë²„ê¹…ìš©
 
 	XMFLOAT3 radiance = { 5.0f, 5.0f, 5.0f };
 	float fallOffStart = 0.0f;
@@ -26,7 +26,7 @@ __declspec(align(256)) struct Light
 	XMFLOAT3 position = { 0.0f, 0.0f, -2.0f };
 	float spotPower = 6.0f;
 	UINT type = LIGHT_OFF;
-	float radius = 0.0f; // ¹İÁö¸§
+	float radius = 0.0f; // ë°˜ì§€ë¦„
 	float d0;
 	float d1;
 

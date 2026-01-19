@@ -1,4 +1,4 @@
-#include "SphSimCustom.h"
+Ôªø#include "SphSimCustom.h"
 
 SphSimCustom::SphSimCustom()
 {
@@ -16,7 +16,7 @@ void SphSimCustom::Initialize(ComPtr<ID3D12Device> device,
 	//GenerateEmitterParticles();
 	GenerateDamParticles();
 
-	// µΩ∫≈©∏≥≈Õ »¸ ª˝º∫
+	// ÎîîÏä§ÌÅ¨Î¶ΩÌÑ∞ Ìûô ÏÉùÏÑ±
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
 	heapDesc.NumDescriptors = 2 * STRUCTURED_CNT + CONSTANT_CNT;
 	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
@@ -24,7 +24,7 @@ void SphSimCustom::Initialize(ComPtr<ID3D12Device> device,
 	ThrowIfFailed(device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_cbvSrvUavHeap)));
 	m_cbvSrvUavHeap->SetName(L"SPH SRV/UAV/CBV Heap");
 
-	// StructuredBuffer ª˝º∫
+	// StructuredBuffer ÏÉùÏÑ±
 	CreateStructuredBufferWithViews(device, 0, sizeof(XMFLOAT3), m_numParticles, L"Position");
 	CreateStructuredBufferWithViews(device, 1, sizeof(XMFLOAT3), m_numParticles, L"PredictedPosition");
 	CreateStructuredBufferWithViews(device, 2, sizeof(XMFLOAT3), m_numParticles, L"Velocity");
@@ -42,62 +42,62 @@ void SphSimCustom::Initialize(ComPtr<ID3D12Device> device,
 	CreateStructuredBufferWithViews(device, 12, sizeof(Sorted), m_numParticles, L"Sorted");
 	CreateStructuredBufferWithViews(device, 13, sizeof(XMFLOAT3), m_numParticles, L"SortedPosition");
 
-	// Position √ ±‚ ªÛ≈¬ -> SRV
+	// Position Ï¥àÍ∏∞ ÏÉÅÌÉú -> SRV
 	UploadAndCopyData(device, commandList, m_position, sizeof(XMFLOAT3),
 		m_positionUploadBuffer, L"PositionUploadBuffer", m_structuredBuffer[m_positionIndex],
 		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-	// PredictedPosition √ ±‚ ªÛ≈¬ -> UAV
+	// PredictedPosition Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_predictedPositionIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// Velocity √ ±‚ ªÛ≈¬ -> SRV
+	// Velocity Ï¥àÍ∏∞ ÏÉÅÌÉú -> SRV
 	UploadAndCopyData(device, commandList, m_velocity, sizeof(XMFLOAT3),
 		m_velocityUploadBuffer, L"VelocityUploadBuffer", m_structuredBuffer[m_velocityIndex],
 		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-	// PredictedVelocity √ ±‚ ªÛ≈¬ -> UAV
+	// PredictedVelocity Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_predictedVelocityIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// Density √ ±‚ ªÛ≈¬ -> UAV
+	// Density Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_densityIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// Pressure √ ±‚ ªÛ≈¬ -> UAV
+	// Pressure Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_pressureIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// SpawnTime √ ±‚ ªÛ≈¬ -> SRV
+	// SpawnTime Ï¥àÍ∏∞ ÏÉÅÌÉú -> SRV
 	UploadAndCopyData(device, commandList, m_spawnTime, sizeof(float),
 		m_spawnTimeUploadBuffer, L"SpawnTimeUploadBuffer", m_structuredBuffer[m_spawnTimeIndex],
 		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-	// CellCount √ ±‚ ªÛ≈¬ -> UAV
+	// CellCount Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_cellCountIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// CellOffset √ ±‚ ªÛ≈¬ -> UAV
+	// CellOffset Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_cellOffsetIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// CellStart √ ±‚ ªÛ≈¬ -> UAV
+	// CellStart Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_cellStartIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// CellStartPartialSum √ ±‚ ªÛ≈¬ -> UAV
+	// CellStartPartialSum Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_cellStartPartialSumIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// CellScatter √ ±‚ ªÛ≈¬ -> UAV
+	// CellScatter Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_cellScatterIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// Sorted √ ±‚ ªÛ≈¬ -> UAV
+	// Sorted Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_sortedIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	// SortedPosition √ ±‚ ªÛ≈¬ -> UAV
+	// SortedPosition Ï¥àÍ∏∞ ÏÉÅÌÉú -> UAV
 	SetBarrier(commandList, m_structuredBuffer[m_sortedPositionIndex],
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
@@ -143,7 +143,7 @@ void SphSimCustom::GenerateEmitterParticles()
 	const float radius4 = m_dp * 12.0f;
 	const UINT batchSize = 1 + num1 + num2 + num3 + num4;
 
-	// πÃ∏Æ «— π¯∏∏ ∞ËªÍ«ÿ µŒ±‚
+	// ÎØ∏Î¶¨ Ìïú Î≤àÎßå Í≥ÑÏÇ∞Ìï¥ ÎëêÍ∏∞
 	XMVECTOR W = XMVector3Normalize(XMLoadFloat3(&m_simParamsData.emitterDir));
 	XMVECTOR worldUp = XMVectorSet(0, 1, 0, 0);
 	if (fabs(XMVectorGetX(XMVector3Dot(W, worldUp))) > 0.99f)
@@ -511,7 +511,7 @@ void SphSimCustom::Compute(ComPtr<ID3D12GraphicsCommandList>& commandList, UINT&
 
 	}
 
-	// ¿ßƒ° æ˜µ•¿Ã∆Æ, ∞Ê∞Ë¡∂∞« √≥∏Æ
+	// ÏúÑÏπò ÏóÖÎç∞Ïù¥Ìä∏, Í≤ΩÍ≥ÑÏ°∞Í±¥ Ï≤òÎ¶¨
 	{
 		commandList->SetPipelineState(Graphics::sphCSPSO.Get());
 
@@ -716,7 +716,7 @@ void SphSimCustom::Render(ComPtr<ID3D12GraphicsCommandList>& commandList,
 	//	commandList->ClearRenderTargetView(rtvHandle, clearValue, 0, nullptr);
 
 	//	commandList->SetPipelineState(Graphics::sphScenePSO.Get());
-	//	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // ªÔ∞¢«¸ Ω∫∆Æ∏≥
+	//	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // ÏÇºÍ∞ÅÌòï Ïä§Ìä∏Î¶Ω
 	//	commandList->DrawInstanced(4, 1, 0, 0);
 
 	//	SetBarrier(commandList, m_sceneRTVBuffer,
@@ -733,7 +733,7 @@ void SphSimCustom::CreateStructuredBufferWithViews(
 	auto heapPropsDefault = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 	auto bufferDescParticles = CD3DX12_RESOURCE_DESC::Buffer(particleDataSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
-	// πˆ∆€ ª˝º∫
+	// Î≤ÑÌçº ÏÉùÏÑ±
 	ThrowIfFailed(device->CreateCommittedResource(
 		&heapPropsDefault,
 		D3D12_HEAP_FLAG_NONE,
@@ -752,7 +752,7 @@ void SphSimCustom::CreateStructuredBufferWithViews(
 	srvDesc.Buffer.StructureByteStride = dataSize;
 	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 
-	// SRV πˆ∆€ º≥¡§
+	// SRV Î≤ÑÌçº ÏÑ§Ï†ï
 	CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle(m_cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), m_cbvSrvUavSize * bufferIndex);
 
 	device->CreateShaderResourceView(
@@ -760,7 +760,7 @@ void SphSimCustom::CreateStructuredBufferWithViews(
 		&srvDesc, srvHandle
 	);
 
-	// UAV πˆ∆€ º≥¡§
+	// UAV Î≤ÑÌçº ÏÑ§Ï†ï
 	CD3DX12_CPU_DESCRIPTOR_HANDLE uavHandle(m_cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), m_cbvSrvUavSize * (STRUCTURED_CNT + bufferIndex));
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
@@ -788,7 +788,7 @@ void SphSimCustom::UploadAndCopyData(ComPtr<ID3D12Device> device,
 		&heapPropsUpload,
 		D3D12_HEAP_FLAG_NONE,
 		&bufferDescUpload,
-		D3D12_RESOURCE_STATE_GENERIC_READ, // UPLOAD »¸¿∫ GENERIC_READø°º≠ Ω√¿€
+		D3D12_RESOURCE_STATE_GENERIC_READ, // UPLOAD ÌûôÏùÄ GENERIC_READÏóêÏÑú ÏãúÏûë
 		nullptr,
 		IID_PPV_ARGS(&uploadBuffer)));
 	uploadBuffer->SetName(dataName.c_str());
@@ -798,13 +798,13 @@ void SphSimCustom::UploadAndCopyData(ComPtr<ID3D12Device> device,
 	uploadData.RowPitch = totalDataSize;
 	uploadData.SlicePitch = totalDataSize;
 
-	// ¥ÎªÛ πˆ∆€ ªÛ≈¬ ¿¸¿Ã: COMMON -> COPY_DEST
+	// ÎåÄÏÉÅ Î≤ÑÌçº ÏÉÅÌÉú Ï†ÑÏù¥: COMMON -> COPY_DEST
 	SetBarrier(commandList, destBuffer,
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST);
 
 	UpdateSubresources(commandList.Get(), destBuffer.Get(), uploadBuffer.Get(), 0, 0, 1, &uploadData);
 
-	// ¥ÎªÛ πˆ∆€ ªÛ≈¬ ¿¸¿Ã: DEST -> destBufferState
+	// ÎåÄÏÉÅ Î≤ÑÌçº ÏÉÅÌÉú Ï†ÑÏù¥: DEST -> destBufferState
 	SetBarrier(commandList, destBuffer,
 		D3D12_RESOURCE_STATE_COPY_DEST, destBufferState);
 
@@ -929,8 +929,8 @@ void SphSimCustom::InitializeDesciptorHeaps(ComPtr<ID3D12Device>& device, UINT w
 
 		D3D12_RESOURCE_DESC depthStencilDesc = {};
 		depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-		depthStencilDesc.Width = static_cast<UINT>(width); // »≠∏È ≥ ∫Ò
-		depthStencilDesc.Height = static_cast<UINT>(height); // »≠∏È ≥Ù¿Ã
+		depthStencilDesc.Width = static_cast<UINT>(width); // ÌôîÎ©¥ ÎÑàÎπÑ
+		depthStencilDesc.Height = static_cast<UINT>(height); // ÌôîÎ©¥ ÎÜíÏù¥
 		depthStencilDesc.DepthOrArraySize = 1;
 		depthStencilDesc.MipLevels = 1;
 		depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
@@ -948,7 +948,7 @@ void SphSimCustom::InitializeDesciptorHeaps(ComPtr<ID3D12Device>& device, UINT w
 		));
 		m_particleDSVBuffer->SetName(L"m_particleDSVBuffer");
 
-		// DSV «⁄µÈ ª˝º∫
+		// DSV Ìï∏Îì§ ÏÉùÏÑ±
 		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 		dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
@@ -1096,8 +1096,8 @@ void SphSimCustom::InitializeDesciptorHeaps(ComPtr<ID3D12Device>& device, UINT w
 
 		D3D12_RESOURCE_DESC depthStencilDesc = {};
 		depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-		depthStencilDesc.Width = static_cast<UINT>(width); // »≠∏È ≥ ∫Ò
-		depthStencilDesc.Height = static_cast<UINT>(height); // »≠∏È ≥Ù¿Ã
+		depthStencilDesc.Width = static_cast<UINT>(width); // ÌôîÎ©¥ ÎÑàÎπÑ
+		depthStencilDesc.Height = static_cast<UINT>(height); // ÌôîÎ©¥ ÎÜíÏù¥
 		depthStencilDesc.DepthOrArraySize = 1;
 		depthStencilDesc.MipLevels = 1;
 		depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -1115,7 +1115,7 @@ void SphSimCustom::InitializeDesciptorHeaps(ComPtr<ID3D12Device>& device, UINT w
 		));
 		m_backgroundDSVBuffer->SetName(L"m_backgroundDSVBuffer");
 
-		// DSV «⁄µÈ ª˝º∫
+		// DSV Ìï∏Îì§ ÏÉùÏÑ±
 		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
@@ -1153,11 +1153,11 @@ void SphSimCustom::CreateCubeMapTexture(
 {
 	wstring wideFilename = StringToWString(filepath);
 
-	// ResourceUploadBatch ∞¥√º ª˝º∫
+	// ResourceUploadBatch Í∞ùÏ≤¥ ÏÉùÏÑ±
 	ResourceUploadBatch resourceUpload(device.Get());
 	resourceUpload.Begin();
 
-	// DDS ≈ÿΩ∫√≥ ∑ŒµÂ
+	// DDS ÌÖçÏä§Ï≤ò Î°úÎìú
 	DDS_ALPHA_MODE alphaMode;
 
 	ThrowIfFailed(CreateDDSTextureFromFileEx(
@@ -1171,11 +1171,11 @@ void SphSimCustom::CreateCubeMapTexture(
 		&alphaMode,
 		&isCubeMap));
 
-	// æ˜∑ŒµÂ πËƒ° ¡æ∑· π◊ GPUø° ¡¶√‚
+	// ÏóÖÎ°úÎìú Î∞∞Ïπò Ï¢ÖÎ£å Î∞è GPUÏóê Ï†úÏ∂ú
 	auto uploadFuture = resourceUpload.End(commandQueue.Get());
 	uploadFuture.wait();
 
-	// SRV ª˝º∫
+	// SRV ÏÉùÏÑ±
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = buffer->GetDesc().Format;

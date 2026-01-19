@@ -1,4 +1,4 @@
-#include "ImageFilter.h"
+﻿#include "ImageFilter.h"
 
 ImageFilter::ImageFilter(
 	ComPtr<ID3D12Device> device, ComPtr<ID3D12GraphicsCommandList> commandList,

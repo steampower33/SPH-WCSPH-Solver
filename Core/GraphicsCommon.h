@@ -1,4 +1,5 @@
-#pragma once
+ï»¿#pragma once
+
 
 #include <d3d12.h>
 #include "d3dx12.h"
@@ -13,7 +14,7 @@
 
 using Microsoft::WRL::ComPtr;
 
-// Âü°í: DirectX_Graphic-Samples ¹Ì´Ï¿£Áø
+// ì°¸ê³ : DirectX_Graphic-Samples ë¯¸ë‹ˆì—”ì§„
 // https://github.com/microsoft/DirectX-Graphics-Samples/blob/master/MiniEngine/Core/GraphicsCommon.h
 
 namespace Graphics

@@ -1,4 +1,4 @@
-#include "Common.hlsli" 
+ï»¿#include "Common.hlsli" 
 
 Texture2D texture[] : register(t0, space0);
 
@@ -8,7 +8,7 @@ float4 TexcoordToView(float2 texcoord)
 
     // [0, 1]x[0, 1] -> [-1, 1]x[-1, 1]
     posProj.xy = texcoord * 2.0 - 1.0;
-    posProj.y *= -1; // ÁÖÀÇ: y ¹æÇâÀ» µÚÁı¾îÁà¾ß ÇÕ´Ï´Ù.
+    posProj.y *= -1; // ì£¼ì˜: y ë°©í–¥ì„ ë’¤ì§‘ì–´ì¤˜ì•¼ í•©ë‹ˆë‹¤.
     posProj.z = texture[depthOnlySRVIndex].Sample(linearClampSampler, texcoord).r;
     posProj.w = 1.0;
 
@@ -31,7 +31,7 @@ float4 main(SamplingPSInput input) : SV_TARGET
     if (mode == 1)
     {
         float4 posView = TexcoordToView(input.texcoord);
-        float dist = length(posView.xyz); // ´«ÀÇ À§Ä¡°¡ ¿øÁ¡ÀÎ ÁÂÇ¥°è
+        float dist = length(posView.xyz); // ëˆˆì˜ ìœ„ì¹˜ê°€ ì›ì ì¸ ì¢Œí‘œê³„
         //float dist = posView.z;
         
         float3 fogColor = float3(1, 1, 1);

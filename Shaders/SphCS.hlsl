@@ -1,4 +1,4 @@
-#include "SphCommon.hlsli"
+ï»¿#include "SphCommon.hlsli"
 
 StructuredBuffer<float3> PredictedPositions : register(t1);
 
@@ -19,7 +19,7 @@ void CylinderBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 		Fb += normal * boundaryStiffness * (distance + radius - cylinderRadius);
 	}
 
-	// Y- ¸é
+	// Y- ë©´
 	float pen = (minBounds.y + radius) - pos.y;
 	if (pen > 0)
 	{
@@ -27,7 +27,7 @@ void CylinderBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 		if (dot(vel, float3(0.0, 1.0, 0.0)) < 0.0)
 			vel.y *= (1.0 - boundaryDamping);
 	}
-	// Y+ ¸é
+	// Y+ ë©´
 	pen = pos.y - (maxBounds.y - radius);
 	if (pen > 0)
 	{
@@ -39,7 +39,7 @@ void CylinderBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 
 void BoxBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 {
-	// X- ¸é
+	// X- ë©´
 	float pen = (minBounds.x + radius) - pos.x;
 	if (pen > 0)
 	{
@@ -47,7 +47,7 @@ void BoxBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 		if (dot(vel, float3(1.0, 0.0, 0.0)) < 0.0)
 			vel.x *= (1.0 - boundaryDamping);
 	}
-	// X+ ¸é
+	// X+ ë©´
 	pen = pos.x - (maxBounds.x - radius);
 	if (pen > 0)
 	{
@@ -56,7 +56,7 @@ void BoxBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 			vel.x *= (1.0 - boundaryDamping);
 	}
 
-	// Y- ¸é
+	// Y- ë©´
 	pen = (minBounds.y + radius) - pos.y;
 	if (pen > 0)
 	{
@@ -64,7 +64,7 @@ void BoxBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 		if (dot(vel, float3(0.0, 1.0, 0.0)) < 0.0)
 			vel.y *= (1.0 - boundaryDamping);
 	}
-	// Y+ ¸é
+	// Y+ ë©´
 	pen = pos.y - (maxBounds.y - radius);
 	if (pen > 0)
 	{
@@ -73,7 +73,7 @@ void BoxBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 			vel.y -= boundaryDamping * vel.y;
 	}
 
-	// Z- ¸é
+	// Z- ë©´
 	pen = (minBounds.z + radius) - pos.z;
 	if (pen > 0)
 	{
@@ -81,7 +81,7 @@ void BoxBoundary(in float3 pos, inout float3 Fb, inout float3 vel)
 		if (dot(vel, float3(0.0, 0.0, 1.0)) < 0.0)
 			vel.z *= (1.0 - boundaryDamping);
 	}
-	// Z+ ¸é
+	// Z+ ë©´
 	pen = pos.z - (maxBounds.z - radius);
 	if (pen > 0)
 	{

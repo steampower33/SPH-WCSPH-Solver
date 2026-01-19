@@ -1,4 +1,4 @@
-Texture2D<float4> input : register(t0, space0);
+﻿Texture2D<float4> input : register(t0, space0);
 RWTexture2D<float4> output : register(u0, space0);
 
 SamplerState pointClampSampler : register(s0, space0);

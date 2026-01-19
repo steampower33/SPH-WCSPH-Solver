@@ -1,4 +1,4 @@
-#include "PostProcess.h"
+Ôªø#include "PostProcess.h"
 
 PostProcess::PostProcess(
 	ComPtr<ID3D12Device> device, ComPtr<ID3D12GraphicsCommandList> commandList,
@@ -202,9 +202,9 @@ void PostProcess::CreateTex2D(
 	}
 
 	auto texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		DXGI_FORMAT_R16G16B16A16_FLOAT, // ≈ÿΩ∫√≥ ∆˜∏À
-		width,                          // »≠∏È ≥ ∫Ò
-		height,                         // »≠∏È ≥Ù¿Ã
+		DXGI_FORMAT_R16G16B16A16_FLOAT, // ÌÖçÏä§Ï≤ò Ìè¨Îß∑
+		width,                          // ÌôîÎ©¥ ÎÑàÎπÑ
+		height,                         // ÌôîÎ©¥ ÎÜíÏù¥
 		1,                              // arraySize
 		1,                              // mipLevels
 		1,                              // sampleCount

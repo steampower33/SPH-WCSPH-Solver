@@ -1,15 +1,15 @@
-#include "Ray.h"
+ï»¿#include "Ray.h"
 
 Ray::Ray(XMFLOAT3& originFloat, XMVECTOR& directionVec)
 {
-	// ÃÖÁ¾ ±¤¼±ÀÇ ¿øÁ¡°ú ¹æÇâ
+	// ìµœì¢… ê´‘ì„ ì˜ ì›ì ê³¼ ë°©í–¥
 	rayOrigin = originFloat;
 	XMStoreFloat3(&rayDirection, directionVec);
 }
 
 bool Ray::RaySphereIntersect(shared_ptr<BoundingSphere>& boundingSphere, float& dist)
 {
-	// ±¤¼±ÀÇ ¿øÁ¡°ú ¹æÇâÀ» º¤ÅÍ·Î ·Îµå
+	// ê´‘ì„ ì˜ ì›ì ê³¼ ë°©í–¥ì„ ë²¡í„°ë¡œ ë¡œë“œ
 	XMVECTOR origin = XMLoadFloat3(&rayOrigin);
 	XMVECTOR direction = XMLoadFloat3(&rayDirection);
 	XMVECTOR center = XMLoadFloat3(&boundingSphere->Center);
@@ -17,20 +17,20 @@ bool Ray::RaySphereIntersect(shared_ptr<BoundingSphere>& boundingSphere, float& 
 	// O - C
 	XMVECTOR oc = XMVectorSubtract(origin, center);
 
-	// a = D ¡¤ D (Á¤±ÔÈ­µÈ ±¤¼± ¹æÇâÀÌ¶ó¸é a = 1)
+	// a = D Â· D (ì •ê·œí™”ëœ ê´‘ì„  ë°©í–¥ì´ë¼ë©´ a = 1)
 	float a = XMVectorGetX(XMVector3Dot(direction, direction));
 
-	// b = 2 * (O - C) ¡¤ D
+	// b = 2 * (O - C) Â· D
 	float b = 2.0f * XMVectorGetX(XMVector3Dot(oc, direction));
 
-	// c = (O - C) ¡¤ (O - C) - r^2
+	// c = (O - C) Â· (O - C) - r^2
 	float radius = boundingSphere->Radius;
 	float c = XMVectorGetX(XMVector3Dot(oc, oc)) - (radius * radius);
 
-	// ÆÇº°½Ä °è»ê
+	// íŒë³„ì‹ ê³„ì‚°
 	float discriminant = b * b - 4.0f * a * c;
 
-	// ÆÇº°½ÄÀÌ À½¼öÀÌ¸é ±³Â÷ÇÏÁö ¾ÊÀ½
+	// íŒë³„ì‹ì´ ìŒìˆ˜ì´ë©´ êµì°¨í•˜ì§€ ì•ŠìŒ
 	if (discriminant < 0.0f)
 		return false;
 
@@ -38,7 +38,7 @@ bool Ray::RaySphereIntersect(shared_ptr<BoundingSphere>& boundingSphere, float& 
 	float t0 = (-b - sqrtDiscriminant) / (2.0f * a);
 	float t1 = (-b + sqrtDiscriminant) / (2.0f * a);
 
-	// °¡Àå ÀÛÀº ¾çÀÇ t °ªÀ» ¼±ÅÃ
+	// ê°€ì¥ ì‘ì€ ì–‘ì˜ t ê°’ì„ ì„ íƒ
 	if (t0 >= 0.0f && t0 <= t1)
 	{
 		dist = t0;
