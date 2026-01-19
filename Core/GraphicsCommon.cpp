@@ -1113,6 +1113,9 @@ void Graphics::CreateShader(
 	std::wstring shaderName = filepath.stem().wstring(); // 확장자 제거된 파일 이름
 
 	//std::wcout << L"Shader Name: " << shaderName << std::endl;
+#if defined(_DEBUG)
+	std::filesystem::create_directories(L"./PDB");
+#endif
 
 	std::wstring pdbFilename = L"./PDB/" + std::wstring(shaderName) + L".pdb";
 	std::wstring shaderIncludePath = std::filesystem::absolute(L"./Shaders").wstring();
@@ -1147,9 +1150,11 @@ void Graphics::CreateShader(
 	ComPtr<IDxcBlob> pdbBlob;
 	result->GetOutput(DXC_OUT_PDB, IID_PPV_ARGS(&pdbBlob), nullptr);
 	if (pdbBlob) {
+		std::filesystem::create_directories(L"./PDB");
 		std::ofstream pdbFile(pdbFilename, std::ios::binary);
-		pdbFile.write((const char*)pdbBlob->GetBufferPointer(), pdbBlob->GetBufferSize());
-		pdbFile.close();
+		if (pdbFile) {
+			pdbFile.write((const char*)pdbBlob->GetBufferPointer(), pdbBlob->GetBufferSize());
+		}
 	}
 
 	// 1. 에러 메시지 확인 (가장 중요)

@@ -20,7 +20,7 @@ int WinApp::Run(EngineBase* pEngine, HINSTANCE hInstance, int nShowCmd)
 		CS_CLASSDC,
 		WndProc,
 		0L, 0L,
-		GetModuleHandle(NULL), NULL, NULL, NULL, NULL, L"LSMEngine", NULL };
+		GetModuleHandle(NULL), NULL, NULL, NULL, NULL, L"SPH-WCSPH-Solver", NULL };
 
 	if (!RegisterClassEx(&wc)) return false;
 
@@ -29,7 +29,7 @@ int WinApp::Run(EngineBase* pEngine, HINSTANCE hInstance, int nShowCmd)
 
 	m_hwnd = CreateWindow(
 		wc.lpszClassName, 
-		L"LSMEngineWindow",
+		L"SPH-WCSPH-Solver",
 		WS_OVERLAPPEDWINDOW,
 		0, // 윈도우 좌측 상단의 x 좌표
 		0, // 윈도우 좌측 상단의 y 좌표
