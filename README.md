@@ -1,27 +1,27 @@
 ﻿# DX12 WCSPH (EOS-SPH) Attempt — Archived
 
-DirectX 12 **Compute Shader** 기반으로 WCSPH(EOS-SPH) 유체 시뮬레이션을 시도했던 저장소입니다.  
-현재는 **아카이브 상태**이며, 동일한 DX12 compute 기반 파이프라인을 유지한 채 **PBF/XPBD 방향으로 재구현**을 계획하고 있습니다.
+A repository exploring WCSPH (EOS-SPH) fluid simulation based on **DirectX 12 Compute Shaders**.  
+This project is currently **Archived**. The plan is to maintain the existing DX12 compute pipeline while **re-implementing the physics solver using PBF/XPBD approaches**.
 
-<video src="./Docs/demo1.mp4" controls muted loop playsinline width="720"></video>
+[![Demo Video](./docs/demo_thumbnail.png)](https://www.youtube.com/watch?v=p0LWeu2Y7aQ)
 
-> 자세한 회고/의사결정 기록: [POSTMORTEM.md](./Docs/POSTMORTEM.md)
+> Detailed Postmortem & Decisions: [POSTMORTEM.md](./Docs/POSTMORTEM.md)
 
 ---
 
-## What’s inside (implemented / WIP)
-- DX12 Compute 기반 particle pipeline 구축(spawn/update) 및 graphics pipeline 렌더 연동
-- 2D 기본 경계 충돌 + 디버그 시각화
-- Uniform Grid(Spatial Hash) 기반 neighbor search 파이프라인 구성  
-  (hash → grouping → scan/prefix-sum **WIP**)
-- Neighbor 결과 기반 밀도/압력(EOS) 계산 및 force 적용 단계 착수
+## What’s inside (Implemented / WIP)
+- **DX12 Particle Pipeline:** Compute shader-based spawn/update loop integrated with the graphics rendering pipeline.
+- **2D Boundary Collision:** Basic boundary handling with debug visualization.
+- **Neighbor Search (Uniform Grid):** Spatial Hashing implementation.
+  - Hashing → Grouping → Scan/Prefix-sum (**WIP**)
+- **Physics Solver:** Preliminary implementation of Density/Pressure (EOS) calculation and Force application steps.
 
 ---
 
 ## Requirements
 - Windows 10+ (DirectX 12)
-- Visual Studio 2019
-- C++17
+- Visual Studio 2019 or later
+- C++17 Standard
 - vcpkg
 - Windows SDK 10.0.18362.0+ (HLSL 2021)
 
@@ -31,70 +31,73 @@ DirectX 12 **Compute Shader** 기반으로 WCSPH(EOS-SPH) 유체 시뮬레이션
 
 ### 1) Install vcpkg
 ```sh
-git clone https://github.com/microsoft/vcpkg.git
+git clone [https://github.com/microsoft/vcpkg.git](https://github.com/microsoft/vcpkg.git)
 cd vcpkg
 bootstrap-vcpkg.bat
 vcpkg integrate install
+
 ```
 
 ### 2) Enable vcpkg manifest mode (Visual Studio)
 
-Project -> Properties -> vcpkg -> Use Vcpkg Manifest = Yes
+Go to: **Project Properties** -> **vcpkg** -> **Use Vcpkg Manifest** = **Yes**
 
-vcpkg.json(Manifest mode) 기준으로 의존성이 자동 설치/연동됩니다.
+Dependencies will be automatically installed based on `vcpkg.json`.
 
 ### 3) Build & Run
 
-솔루션 열기 → x64 / Debug(or Release) → 실행
+Open Solution -> Select **x64** / **Debug** (or Release) -> Run
 
 ---
 
 ## Assets / Third-Party Content
 
 This repository uses an HDRI environment map originally from ambientCG:
-- Asset: IndoorEnvironmentHDRI013 (converted to cubemap for this project)
-- Source: https://ambientcg.com/a/IndoorEnvironmentHDRI013
-- License: Creative Commons CC0 1.0 Universal
 
-Attribution is not required for CC0, but appreciated.
-
-Suggested credit line (optional):
+* **Asset:** IndoorEnvironmentHDRI013 (converted to cubemap)
+* **Source:** [ambientCG.com](https://ambientcg.com/a/IndoorEnvironmentHDRI013)
+* **License:** Creative Commons CC0 1.0 Universal
 
 > Created using IndoorEnvironmentHDRI013 from ambientCG.com, licensed under CC0 1.0 Universal.
 
 ---
 
-## Debug shader PDB
-- Debug 빌드에서 shader PDB가 ./PDB/ 아래에 생성됩니다.
-- PDB/ 폴더는 런타임에 자동 생성되도록 구성하는 것을 권장합니다(커밋 대상 아님).
+## Debug Shader PDB
+
+* In **Debug** builds, shader PDB files are generated under `./PDB/`.
+* It is recommended to configure the `./PDB/` folder to be generated at runtime (excluded from version control).
 
 ---
 
-## Repo notes
-- Fluid 관련 주요 코드:
-    - Core/SphSimulator.cpp
-    - Shaders/SphCS.hlsl
+## Repository Notes
 
---- 
+* **Key Fluid Simulation Code:**
+* `Core/SphSimulator.cpp`
+* `Shaders/SphCS.hlsl`
+
+---
 
 ## Controls
-- `Space` : Start / Pause simulation
-- `F` : Toggle camera lock
-- `T` : Toggle particle init mode (Dam Break / Emitter)
-- `R` : Reset particle positions
-- `W/A/S/D` : Move camera
+
+* `Space` : Start / Pause simulation
+* `F` : Toggle camera lock
+* `T` : Toggle particle init mode (Dam Break / Emitter)
+* `R` : Reset particle positions
+* `W/A/S/D` : Move camera
 
 ---
 
 ## License
-- Code: MIT License (see LICENSE)
-- Third-party assets: 각 에셋의 라이선스를 따릅니다(ambientCG HDRI는 CC0 1.0).
+
+* **Code:** MIT License (see [LICENSE](https://www.google.com/search?q=./LICENSE))
+* **Third-party assets:** Subject to their respective licenses (e.g., ambientCG HDRI is CC0 1.0).
 
 ---
 
-## Technical notes (high-level)
-- GPU neighbor search: spatial hashing + grouping + prefix-sum(cell ranges) (WIP)
-- Sorting: bitonic sort (naive → attempted optimization → reverted)
-- Data layout: switched AoS/SoA multiple times; SoA performed better in this pipeline
-- Debugging: PIX-based GPU buffer validation + UAV barriers between compute passes
-- Scale (at the time): ~100k particles (50×40×50), group size 512
+## Technical Notes (High-level)
+
+* **GPU Neighbor Search:** Implemented using Spatial Hashing + Grouping + Prefix-sum (Cell ranges).
+* **Sorting:** Bitonic sort (Initially naive implementation → Attempted optimization → Reverted for stability).
+* **Data Layout:** Tested both AoS and SoA; **SoA (Structure of Arrays)** demonstrated better performance in this compute pipeline.
+* **Debugging:** Validated using PIX (GPU buffer inspection) and UAV barriers between compute passes.
+* **Scale:** Tested up to ~100k particles (50×40×50 grid), with a compute group size of 512.
