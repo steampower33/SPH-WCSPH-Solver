@@ -3,7 +3,7 @@
 A repository exploring WCSPH (EOS-SPH) fluid simulation based on **DirectX 12 Compute Shaders**.  
 This project is currently **Archived**. The plan is to maintain the existing DX12 compute pipeline while **re-implementing the physics solver using PBF/XPBD approaches**.
 
-[![Demo Video](./docs/demo_thumbnail.png)](https://www.youtube.com/watch?v=p0LWeu2Y7aQ)
+[![Demo Video](./Docs/demo_thumbnail.png)](https://www.youtube.com/watch?v=p0LWeu2Y7aQ)
 
 > Detailed Postmortem & Decisions: [POSTMORTEM.md](./Docs/POSTMORTEM.md)
 
